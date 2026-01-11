@@ -1,0 +1,40 @@
+@import 'tailwindcss';
+
+@layer base {
+  body {
+    @apply bg-[#0F172A] text-gray-300;
+    background-image: url('../assets/images/background_destinyShop.svg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    cursor: url('../assets/icons/cursor.svg'), auto;
+  }
+
+  * {
+    cursor: url('../assets/icons/cursor.svg'), auto;
+  }
+
+  a, button {
+    cursor: url('../assets/icons/cursor.svg'), pointer;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1e293b;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
