@@ -143,7 +143,7 @@ const PaymentGatewayButton = React.forwardRef<HTMLButtonElement, PaymentGatewayB
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         className={cn(
-          "relative flex items-center justify-center gap-2 px-4 py-3 min-w-[160px] h-[80px]",
+          "relative flex items-center justify-center gap-2 px-4 py-3 min-w-[138px] h-[64px] md:min-w-[160px] md:h-[80px]",
           "rounded-lg border transition-all duration-300 ease-out group",
           "font-semibold text-sm",
           // Default/inactive state

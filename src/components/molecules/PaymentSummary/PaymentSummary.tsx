@@ -104,34 +104,39 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({
       <div className="mt-14">
         <p className="text-white text-base mb-3">Tem um cupom?</p>
 
-        <div className="flex">
-          <input
-            type="text"
-            value={couponCode}
-            onChange={(e) => {
-              setCouponCode(e.target.value.toUpperCase());
-              setCouponError('');
-            }}
-            placeholder="Insira o cupom aqui"
-            disabled={couponApplied}
-            className="flex-1 bg-[#6d747b19] border border-[#6d747b19] border-r-0 rounded-bl-lg rounded-tl-lg px-4 py-3 text-base text-white placeholder:text-[#6D747B] focus:outline-none disabled:opacity-50"
-          />
+        <div className="flex flex-col sm:flex-row gap-y-2">
+          <div className="flex flex-1">
+            <input
+              type="text"
+              value={couponCode}
+              onChange={(e) => {
+                setCouponCode(e.target.value.toUpperCase());
+                setCouponError('');
+              }}
+              placeholder="Insira o cupom aqui"
+              disabled={couponApplied}
+              className="w-full bg-[#6d747b19] border border-[#6d747b19] sm:border-r-0 rounded-lg sm:rounded-bl-lg sm:rounded-tl-lg sm:rounded-tr-none sm:rounded-br-none px-4 py-3 text-base text-white placeholder:text-[#6D747B] focus:outline-none disabled:opacity-50 truncate"
+              maxLength={20} // Limitar o comprimento do cupom
+            />
+          </div>
 
-          {couponApplied ? (
-            <button
-              onClick={handleRemoveCoupon}
-              className="px-4 py-3 text-base border rounded-br-lg rounded-tr-lg border-l-0 border-red-600/20 bg-red-600/20 font-medium text-red-400  hover:text-red-300 transition-colors"
-            >
-              Remover
-            </button>
-          ) : (
-            <button
-              onClick={handleApplyCoupon}
-              className="px-4 py-3 text-base border rounded-br-lg rounded-tr-lg border-l-0 border-[#377dff19] bg-[#377dff19] font-medium text-[#377dff] transition-colors"
-            >
-              Aplicar
-            </button>
-          )}
+          <div className="flex">
+            {couponApplied ? (
+              <button
+                onClick={handleRemoveCoupon}
+                className="flex-1 sm:flex-none px-4 py-3 text-base border rounded-lg sm:rounded-br-lg sm:rounded-tr-lg sm:rounded-bl-none sm:rounded-tl-none border-red-600/20 bg-red-600/20 font-medium text-red-400 hover:text-red-300 transition-colors w-full"
+              >
+                Remover
+              </button>
+            ) : (
+              <button
+                onClick={handleApplyCoupon}
+                className="flex-1 sm:flex-none px-4 py-3 text-base border rounded-lg sm:rounded-br-lg sm:rounded-tr-lg sm:rounded-bl-none sm:rounded-tl-none border-[#377dff19] bg-[#377dff19] font-medium text-[#377dff] transition-colors w-full"
+              >
+                Aplicar
+              </button>
+            )}
+          </div>
         </div>
 
         {couponError && (
