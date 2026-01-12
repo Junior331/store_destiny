@@ -173,7 +173,7 @@ export function ProductCard({ product, checkoutMode = false, quantity: propQuant
             height={242}
             alt={product.name}
             src={getImage(product.imageUrl)}
-            className={`rotate-[0.829deg] transition-transform duration-300 group-hover/card:-translate-y-2 ${imageClassName || ''}`}
+            className={`rotate-[0.829deg] md:w-[194px] transition-transform duration-300 group-hover/card:-translate-y-2 ${imageClassName || ''}`}
           />
         </div>
 

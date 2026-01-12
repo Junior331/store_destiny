@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { Tabs } from '@/components/atoms/Tabs';
 import { getAllProducts } from '@/lib/data/mockProducts';
 import { Typography } from '@/components/atoms/Typography';
 import { ShinyButton } from '@/components/atoms/ShinyButton';
@@ -32,11 +31,29 @@ export default function HomePage() {
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
       <div className="mb-8 space-y-6">
-        <Tabs
-          tabs={TABS}
-          activeTab={activeTab}
-          onTabChange={setActiveTab}
-        />
+        {/* Tabs customizadas com scroll */}
+        <div className="relative">
+          <div className="overflow-x-auto scrollbar-hide -mx-4 px-4 md:mx-0 md:overflow-visible md:px-0">
+            <div className="flex gap-2 min-w-max md:min-w-0 md:w-full md:justify-start">
+              {TABS.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`
+                    px-5 py-3 rounded-full text-sm md:text-base font-medium whitespace-nowrap
+                    transition-all duration-200 flex-shrink-0
+                    ${activeTab === tab.id
+                      ? 'bg-blue-600 text-white shadow-lg'
+                      : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'
+                    }
+                  `}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
 
         <div>
           <Typography variant="h1" className="mb-2">

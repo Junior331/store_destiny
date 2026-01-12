@@ -93,7 +93,7 @@ export function CheckoutTemplate({
 
             {/* Divisor vertical - aparece apenas no desktop */}
             <div
-              className="w-[1px] h-[156px]"
+              className="w-[156px] h-[1px] md:w-[1px] md:h-[156px]"
               style={{
                 background: 'rgba(243, 243, 243, 0.10)',
               }}
