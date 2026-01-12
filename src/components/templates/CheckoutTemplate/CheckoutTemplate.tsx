@@ -4,10 +4,12 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/atoms/Button';
-import { Typography } from '@/components/atoms/Typography';
-import { CartItem } from '@/components/molecules/CartItem';
 import { CheckoutForm } from '@/components/organisms/CheckoutForm';
+import { PaymentSummary } from '@/components/molecules/PaymentSummary';
+import { ProductCard } from '@/components/molecules/ProductCard';
 import { useCart } from '@/lib/hooks/useCart';
+import { calculateCheckoutTotals } from '@/lib/utils/calculations';
+import { useCheckoutStore } from '@/store/checkoutStore';
 
 export interface CheckoutTemplateProps {
   serverId: string;
@@ -20,16 +22,22 @@ export function CheckoutTemplate({
 }: CheckoutTemplateProps) {
   const router = useRouter();
   const { items } = useCart();
+  const { appliedCoupon, selectedGateway } = useCheckoutStore();
+
+  const { subtotal, discount, gatewayFee, total } = calculateCheckoutTotals(
+    items,
+    appliedCoupon,
+    selectedGateway?.fee || 0
+  );
 
   useEffect(() => {
-    // Redirecionar para /view se carrinho vazio
     if (items.length === 0) {
-      // router.push(`/${serverId}/view`);
+      router.push('/');
     }
-  }, [items.length, router, serverId]);
+  }, [items.length, router]);
 
   const handleBackToStore = () => {
-    // router.push(`/${serverId}/view`);
+    router.push('/');
   };
 
   if (items.length === 0) {
@@ -37,40 +45,77 @@ export function CheckoutTemplate({
   }
 
   return (
-    <div className="min-h-screen bg-[#0F172A]">
-      <div className="max-w-6xl mx-auto px-4 py-8">
+    <div className="min-h-screen">
+      <div className="max-w-7xl mx-auto px-4 py-8">
         <Button
           onClick={handleBackToStore}
           variant="ghost"
-          className="mb-6"
+          className="mb-6 text-white hover:text-white/80"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
-          Voltar para loja
+          Voltar
         </Button>
 
-        <div className="mb-8">
-          <Typography variant="h1" className="mb-2">
-            Finalizar Compra
-          </Typography>
-          <Typography variant="body">
-            {serverName}
-          </Typography>
-        </div>
+        <div className="flex flex-col gap-8">
+          {/* Left Side - Order Summary */}
+          <div>
+            <h1 className="text-white text-3xl font-bold mb-2">
+              Finalize seu pedido!
+            </h1>
+            <p className="text-gray-400 text-sm mb-6">
+              Seu pedido será entregue após a confirmação do pagamento.
+              <br />
+              <button className="text-[#377DFF] italic hover:underline">
+                Clique aqui
+              </button>{' '}
+              para entender o prazo de recebimento
+            </p>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="space-y-4">
-            <div className="bg-secondary rounded-lg p-6 border border-slate-700">
-              <Typography variant="h3" className="mb-4">
-                Itens do Carrinho
-              </Typography>
-              <div className="space-y-3">
+            {/* Order Details */}
+            <div className="space-y-6 items-center md:space-y-0 md:grid md:grid-cols-[minmax(auto,360px)_auto_1fr] md:gap-5">
+              {/* PaymentSummary - largura fixa */}
+              <PaymentSummary
+                cashValue={items.reduce((acc, item) => {
+                  const price = item.product.discountedPrice || item.product.originalPrice;
+                  return acc + (price * item.quantity);
+                }, 0)}
+                paymentFee={gatewayFee}
+                onApplyCoupon={(coupon) => {
+                  const validCoupons: Record<string, number> = {
+                    'DESCONTO10': 50,
+                    'PROMO20': 100,
+                    'VIP': 150,
+                  };
+                  const discount = validCoupons[coupon];
+                  return { valid: !!discount, discount: discount || 0 };
+                }}
+                onTotalChange={(total) => console.log('Total:', total)}
+              />
+
+              {/* Divisor vertical - aparece apenas no desktop */}
+                <div
+                  className="w-[1px] h-[156px]"
+                  style={{
+                    background: 'rgba(243, 243, 243, 0.10)',
+                  }}
+                />
+
+              {/* Cart Items */}
+              <div className="flex items-center gap-4 pt-6 md:pt-0">
                 {items.map((item) => (
-                  <CartItem key={item.product.id} item={item} />
+                  <div key={item.product.id} className="w-56">
+                    <ProductCard
+                      product={item.product}
+                      checkoutMode={true}
+                      quantity={item.quantity}
+                    />
+                  </div>
                 ))}
               </div>
             </div>
           </div>
 
+          {/* Right Side - Payment Form */}
           <div>
             <CheckoutForm serverId={serverId} />
           </div>

@@ -3,14 +3,11 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-import { Button } from '@/components/atoms/Button';
-import { Typography } from '@/components/atoms/Typography';
 import { CouponInput } from '@/components/molecules/CouponInput';
-import { PriceDisplay } from '@/components/molecules/PriceDisplay';
-import { PaymentGatewaySelector } from '@/components/organisms/PaymentGatewaySelector';
+import { PaymentGatewaySelector } from '@/components/molecules/PaymentGatewaySelector';
+import { PaymentGateway } from '@/components/atoms/PaymentGatewayButton';
 import { useCart } from '@/lib/hooks/useCart';
 import { useCheckoutStore } from '@/store/checkoutStore';
-import { calculateCheckoutTotals } from '@/lib/utils/calculations';
 
 export interface CheckoutFormProps {
   serverId: string;
@@ -19,17 +16,12 @@ export interface CheckoutFormProps {
 export function CheckoutForm({ serverId }: CheckoutFormProps) {
   const router = useRouter();
   const [isProcessing, setIsProcessing] = useState(false);
-  const { items, clearCart } = useCart();
-  const { selectedGateway, appliedCoupon, reset } = useCheckoutStore();
-
-  const { subtotal, discount, gatewayFee, total } = calculateCheckoutTotals(
-    items,
-    appliedCoupon,
-    selectedGateway?.fee || 0
-  );
+  const [selectedPayment, setSelectedPayment] = useState<PaymentGateway>();
+  const { clearCart } = useCart();
+  const { reset } = useCheckoutStore();
 
   const handleSubmit = async () => {
-    if (!selectedGateway) {
+    if (!selectedPayment) {
       toast.error('Selecione um método de pagamento');
       return;
     }
@@ -44,41 +36,34 @@ export function CheckoutForm({ serverId }: CheckoutFormProps) {
     reset();
     setIsProcessing(false);
 
-    // router.push(`/${serverId}/view`);
+    router.push('/');
   };
 
   return (
     <div className="space-y-6">
-      <PaymentGatewaySelector />
 
-      <div className="bg-secondary rounded-lg p-6 border border-slate-700">
-        <Typography variant="h3" className="mb-4">
-          Cupom de Desconto
-        </Typography>
-        <CouponInput />
-      </div>
+      {/* Payment Method Selection */}
+      <div>
+        <h3 className="text-white text-lg font-semibold mb-4">
+          Escolha o método de pagamento:
+        </h3>
 
-      <div className="bg-secondary rounded-lg p-6 border border-slate-700">
-        <Typography variant="h3" className="mb-4">
-          Resumo do Pedido
-        </Typography>
-        <PriceDisplay
-          subtotal={subtotal}
-          discount={discount}
-          gatewayFee={gatewayFee}
-          total={total}
+        <PaymentGatewaySelector
+          value={selectedPayment}
+          onChange={setSelectedPayment}
         />
       </div>
 
-      <Button
-        onClick={handleSubmit}
-        variant="accent"
-        className="w-full"
-        size="lg"
-        disabled={!selectedGateway || isProcessing}
-      >
-        {isProcessing ? 'Processando...' : 'Confirmar Pagamento'}
-      </Button>
+      {/* Finalize Button */}
+      <div className="pt-4">
+        <button
+          onClick={handleSubmit}
+          disabled={!selectedPayment || isProcessing}
+          className="w-full h-14 rounded-full bg-[#00C9FF] hover:bg-[#00B8EE] disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-lg transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+        >
+          {isProcessing ? 'Processando...' : 'Finalizar'}
+        </button>
+      </div>
     </div>
   );
 }

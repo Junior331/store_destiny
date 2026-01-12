@@ -52,6 +52,13 @@ export const PAYMENT_GATEWAYS: PaymentGateway[] = [
     fee: 1.0,
     active: true,
   },
+  {
+    id: 'foxbit',
+    name: 'Foxbit',
+    icon: '🦊',
+    fee: 0.5,
+    active: true,
+  },
 ];
 
 export function usePaymentGateway() {

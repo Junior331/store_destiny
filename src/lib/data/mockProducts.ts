@@ -68,7 +68,7 @@ export const MOCK_PRODUCTS: Product[] = [
     rarity: 'rare',
   },
   {
-    id: '6',
+    id: '7',
     serverId: 'shop',
     name: '100.000 CASH',
     cashAmount: 100000,
@@ -79,7 +79,7 @@ export const MOCK_PRODUCTS: Product[] = [
     rarity: 'rare',
   },
   {
-    id: '7',
+    id: '8',
     serverId: 'shop',
     name: '150.000 CASH',
     cashAmount: 150000,

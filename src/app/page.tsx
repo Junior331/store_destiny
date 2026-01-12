@@ -1,12 +1,14 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 import { Tabs } from '@/components/atoms/Tabs';
 import { getAllProducts } from '@/lib/data/mockProducts';
 import { Typography } from '@/components/atoms/Typography';
 import { ShinyButton } from '@/components/atoms/ShinyButton';
 import { ProductGrid } from '@/components/organisms/ProductGrid';
+import { useCart } from '@/lib/hooks/useCart';
 
 const TABS = [
   { id: 'cash', label: 'Cash' },
@@ -16,8 +18,16 @@ const TABS = [
 ];
 
 export default function HomePage() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState('cash');
   const products = getAllProducts();
+  const { items } = useCart();
+
+  const handleCheckout = () => {
+    if (items.length > 0) {
+      router.push('/checkout');
+    }
+  };
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
@@ -40,7 +50,11 @@ export default function HomePage() {
 
       <ProductGrid products={products} />
 
-      <ShinyButton>Finalizar pedido</ShinyButton>
+      {items.length > 0 && (
+        <ShinyButton onClick={handleCheckout}>
+          Finalizar pedido
+        </ShinyButton>
+      )}
     </div>
   );
 }

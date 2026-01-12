@@ -7,10 +7,15 @@ import { Product, ProductRarity } from '@/lib/types';
 import { Button } from '@/components/atoms/Button';
 import { formatCurrency, formatCash } from '@/lib/utils/formatters';
 import { useCart } from '@/lib/hooks/useCart';
+import { useProductCard } from '@/contexts/ProductCardContext';
 import { getImage } from '@/assets/images';
 
 export interface ProductCardProps {
   product: Product;
+  checkoutMode?: boolean;
+  quantity?: number;
+  className?: string;
+  imageClassName?: string;
 }
 
 const RARITY_COLORS: Record<ProductRarity, { border: string; gradientStart: string; gradientEnd: string; glowBg: string; hoverGlow: string }> = {
@@ -37,15 +42,23 @@ const RARITY_COLORS: Record<ProductRarity, { border: string; gradientStart: stri
   },
 };
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product, checkoutMode = false, quantity: propQuantity, className, imageClassName }: ProductCardProps) {
   const { addToCart, updateQuantity, isInCart, getItemQuantity } = useCart();
-  const quantity = getItemQuantity(product.id);
+  const { activeCardId, setActiveCardId } = useProductCard();
+  const quantity = propQuantity ?? getItemQuantity(product.id);
   const inCart = isInCart(product.id);
   const rarityColors = RARITY_COLORS[product.rarity];
-  const [showButton, setShowButton] = React.useState(false);
+  const showButton = activeCardId === product.id;
+  const [isAdding, setIsAdding] = React.useState(false);
 
   const handleAddToCart = () => {
+    setIsAdding(true);
     addToCart(product);
+
+    setTimeout(() => {
+      setIsAdding(false);
+      setActiveCardId(null);
+    }, 600);
   };
 
   const handleIncrement = () => {
@@ -59,7 +72,7 @@ export function ProductCard({ product }: ProductCardProps) {
   };
 
   const handleCardClick = () => {
-    setShowButton(true);
+    setActiveCardId(product.id);
   };
 
   const price = product.discountedPrice || product.originalPrice;
@@ -98,47 +111,78 @@ export function ProductCard({ product }: ProductCardProps) {
         </svg>
       </div>
 
-      <div className="absolute top-4 right-4 pointer-events-none">
-        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="89" viewBox="0 0 15 89" fill="none">
-          <path d="M15 89L-4.36736e-08 89L-8.73471e-08 88L15 88L15 89ZM15 87L-1.31021e-07 87L-2.62041e-07 84L15 84L15 87Z" fill={`url(#paint0_qr_${product.id})`} />
-          <path d="M15 83L-3.05715e-07 83L-3.49389e-07 82L15 82L15 83ZM15 81L-3.93062e-07 81L-4.80409e-07 79L15 79L15 81ZM15 78L-5.24083e-07 78L-6.1143e-07 76L15 76L15 78Z" fill={`url(#paint1_qr_${product.id})`} />
-          <path d="M15 75L-6.55104e-07 75L-6.98777e-07 74L15 74L15 75ZM15 71L-8.29798e-07 71L-8.73471e-07 70L15 70L15 71ZM15 69L-9.17145e-07 69L-9.60819e-07 68L15 68L15 69Z" fill={`url(#paint2_qr_${product.id})`} />
-          <path d="M15 66L-1.04817e-06 66L15 66ZM15 63L-1.17919e-06 63L-1.31021e-06 60L15 60L15 63ZM15 59L-1.35388e-06 59L15 59Z" fill={`url(#paint3_qr_${product.id})`} />
-          <path d="M15 58L-1.39755e-06 58L-1.52858e-06 55L15 55L15 58ZM15 54L-1.57225e-06 54L-1.6596e-06 52L15 52L15 54ZM15 51L-1.70327e-06 51L-1.74694e-06 50L15 50L15 51Z" fill={`url(#paint4_qr_${product.id})`} />
-          <path d="M15 50L-1.74694e-06 50L-1.87796e-06 47L15 47L15 50ZM15 46L-1.92164e-06 46L-2.05266e-06 43L15 43L15 46ZM15 43L-2.05266e-06 43L-2.09633e-06 42L15 42L15 43Z" fill={`url(#paint5_qr_${product.id})`} />
-          <path d="M15 41L-2.14001e-06 41L-2.18368e-06 40L15 40L15 41ZM15 39L-2.22735e-06 39L-2.35837e-06 36L15 36L15 39ZM15 34L-2.44572e-06 34L15 34Z" fill={`url(#paint6_qr_${product.id})`} />
-          <path d="M15 33L-2.48939e-06 33L-2.57674e-06 31L15 31L15 33ZM15 28L-2.70776e-06 28L-2.75144e-06 27L15 27L15 28ZM15 27L-2.75144e-06 27L-2.79511e-06 26L15 26L15 27Z" fill={`url(#paint7_qr_${product.id})`} />
-          <path d="M15 24L-2.88246e-06 24L15 24ZM15 21L-3.01348e-06 21L-3.10082e-06 19L15 19L15 21ZM15 18L-3.1445e-06 18L15 18Z" fill={`url(#paint8_qr_${product.id})`} />
-          <path d="M15 16L-3.23184e-06 16L-3.27552e-06 15L15 15L15 16ZM15 14L-3.31919e-06 14L-3.45021e-06 11L15 11L15 14ZM15 10L-3.49389e-06 10L-3.53756e-06 9L15 9L15 10Z" fill={`url(#paint9_qr_${product.id})`} />
-          <path d="M15 8L-3.58123e-06 8L-3.66858e-06 6L15 6L15 8ZM15 5L-3.71225e-06 5L-3.75593e-06 4L15 4L15 5ZM15 3L-3.7996e-06 3L-3.93062e-06 0L15 -6.56239e-07L15 3Z" fill={`url(#paint10_qr_${product.id})`} />
-          <defs>
-            {[...Array(11)].map((_, i) => (
-              <linearGradient key={i} id={`paint${i}_qr_${product.id}`} x1="-1.96531e-06" y1="45" x2="15" y2="45" gradientUnits="userSpaceOnUse">
-                <stop stopColor={rarityColors.gradientStart} />
-                <stop offset="1" stopColor={rarityColors.gradientEnd} />
-              </linearGradient>
-            ))}
-          </defs>
-        </svg>
-      </div>
+      {checkoutMode ? (
+        /* Checkout Mode - Quantity Controls */
+        <div className="absolute top-4 right-4 flex flex-col items-center gap-1 z-20">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleIncrement();
+            }}
+            disabled={quantity >= 15}
+            className="w-8 h-8 rounded-full bg-[#377DFF] text-white flex items-center justify-center hover:bg-[#2868dd] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            <Plus className="w-4 h-4" />
+          </button>
+
+          <span className="text-white font-bold text-lg min-w-[32px] text-center">
+            {quantity < 10 ? `0${quantity}` : quantity}
+          </span>
+
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDecrement();
+            }}
+            className="w-8 h-8 rounded-full bg-transparent border border-white text-white flex items-center justify-center hover:bg-white/10 transition-colors"
+          >
+            <Minus className="w-4 h-4" />
+          </button>
+        </div>
+      ) : (
+        /* Normal Mode - QR Code SVG */
+        <div className="absolute top-4 right-4 pointer-events-none">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="89" viewBox="0 0 15 89" fill="none">
+            <path d="M15 89L-4.36736e-08 89L-8.73471e-08 88L15 88L15 89ZM15 87L-1.31021e-07 87L-2.62041e-07 84L15 84L15 87Z" fill={`url(#paint0_qr_${product.id})`} />
+            <path d="M15 83L-3.05715e-07 83L-3.49389e-07 82L15 82L15 83ZM15 81L-3.93062e-07 81L-4.80409e-07 79L15 79L15 81ZM15 78L-5.24083e-07 78L-6.1143e-07 76L15 76L15 78Z" fill={`url(#paint1_qr_${product.id})`} />
+            <path d="M15 75L-6.55104e-07 75L-6.98777e-07 74L15 74L15 75ZM15 71L-8.29798e-07 71L-8.73471e-07 70L15 70L15 71ZM15 69L-9.17145e-07 69L-9.60819e-07 68L15 68L15 69Z" fill={`url(#paint2_qr_${product.id})`} />
+            <path d="M15 66L-1.04817e-06 66L15 66ZM15 63L-1.17919e-06 63L-1.31021e-06 60L15 60L15 63ZM15 59L-1.35388e-06 59L15 59Z" fill={`url(#paint3_qr_${product.id})`} />
+            <path d="M15 58L-1.39755e-06 58L-1.52858e-06 55L15 55L15 58ZM15 54L-1.57225e-06 54L-1.6596e-06 52L15 52L15 54ZM15 51L-1.70327e-06 51L-1.74694e-06 50L15 50L15 51Z" fill={`url(#paint4_qr_${product.id})`} />
+            <path d="M15 50L-1.74694e-06 50L-1.87796e-06 47L15 47L15 50ZM15 46L-1.92164e-06 46L-2.05266e-06 43L15 43L15 46ZM15 43L-2.05266e-06 43L-2.09633e-06 42L15 42L15 43Z" fill={`url(#paint5_qr_${product.id})`} />
+            <path d="M15 41L-2.14001e-06 41L-2.18368e-06 40L15 40L15 41ZM15 39L-2.22735e-06 39L-2.35837e-06 36L15 36L15 39ZM15 34L-2.44572e-06 34L15 34Z" fill={`url(#paint6_qr_${product.id})`} />
+            <path d="M15 33L-2.48939e-06 33L-2.57674e-06 31L15 31L15 33ZM15 28L-2.70776e-06 28L-2.75144e-06 27L15 27L15 28ZM15 27L-2.75144e-06 27L-2.79511e-06 26L15 26L15 27Z" fill={`url(#paint7_qr_${product.id})`} />
+            <path d="M15 24L-2.88246e-06 24L15 24ZM15 21L-3.01348e-06 21L-3.10082e-06 19L15 19L15 21ZM15 18L-3.1445e-06 18L15 18Z" fill={`url(#paint8_qr_${product.id})`} />
+            <path d="M15 16L-3.23184e-06 16L-3.27552e-06 15L15 15L15 16ZM15 14L-3.31919e-06 14L-3.45021e-06 11L15 11L15 14ZM15 10L-3.49389e-06 10L-3.53756e-06 9L15 9L15 10Z" fill={`url(#paint9_qr_${product.id})`} />
+            <path d="M15 8L-3.58123e-06 8L-3.66858e-06 6L15 6L15 8ZM15 5L-3.71225e-06 5L-3.75593e-06 4L15 4L15 5ZM15 3L-3.7996e-06 3L-3.93062e-06 0L15 -6.56239e-07L15 3Z" fill={`url(#paint10_qr_${product.id})`} />
+            <defs>
+              {[...Array(11)].map((_, i) => (
+                <linearGradient key={i} id={`paint${i}_qr_${product.id}`} x1="-1.96531e-06" y1="45" x2="15" y2="45" gradientUnits="userSpaceOnUse">
+                  <stop stopColor={rarityColors.gradientStart} />
+                  <stop offset="1" stopColor={rarityColors.gradientEnd} />
+                </linearGradient>
+              ))}
+            </defs>
+          </svg>
+        </div>
+      )}
 
       <div className="relative z-10 p-3 pb-4 flex flex-col">
-        <div className="flex items-center justify-center -mt-[35px] -ml-[25px] mb-2">
+        <div className={`flex items-center -mt-[35px] -ml-[14px] mb-2 ${className || ''}`}>
           <Image
             width={194}
             height={242}
             alt={product.name}
             src={getImage(product.imageUrl)}
-            className='rotate-[0.829deg]'
+            className={`rotate-[0.829deg] transition-transform duration-300 group-hover/card:-translate-y-2 ${imageClassName || ''}`}
           />
         </div>
 
         <div className="space-y-1.5">
           <div className="text-left">
-            <h3 className="text-white text-lg font-bold leading-tight">
+            <h3 className="text-[#f3f3f366] group-hover/card:text-white text-lg font-bold leading-tight">
               {formatCash(product.cashAmount)}
             </h3>
-            <p className="text-gray-400 text-[10px] uppercase tracking-wide">
+            <p className="text-[#f3f3f366] group-hover/card:text-white text-[10px] uppercase tracking-wide">
               CASH
             </p>
           </div>
@@ -181,11 +225,27 @@ export function ProductCard({ product }: ProductCardProps) {
                   e.stopPropagation();
                   handleAddToCart();
                 }}
-                className="min-w-24  h-8 bg-transparent border border-white text-white text-sm py-3 px-4 rounded-full flex items-center justify-center gap-2 transition-colors duration-200"
+                disabled={isAdding}
+                className={`min-w-24 h-8 bg-transparent border border-white text-white text-sm py-3 px-4 rounded-full flex items-center justify-center gap-2 transition-all duration-300 ${
+                  isAdding
+                    ? 'scale-110 bg-green-500 border-green-500 animate-pulse'
+                    : 'hover:bg-white/10'
+                }`}
               >
-
-                <ShoppingCart className="w-3.5 h-3.5" />
-                Adicionar
+                {isAdding ? (
+                  <>
+                    <svg className="animate-spin h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Adicionado!
+                  </>
+                ) : (
+                  <>
+                    <ShoppingCart className="w-3.5 h-3.5" />
+                    Adicionar
+                  </>
+                )}
               </button>
             </div>
           )}

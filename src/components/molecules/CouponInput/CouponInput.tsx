@@ -53,27 +53,30 @@ export function CouponInput() {
   return (
     <div className="space-y-2">
       <div className="flex gap-2">
-        <Input
+        <input
+          type="text"
           value={code}
           onChange={(e) => setCode(e.target.value.toUpperCase())}
-          placeholder="Digite o cupom"
+          placeholder="Insira o cupom aqui"
           disabled={isValidating}
-          error={error || undefined}
+          className="flex-1 h-10 px-4 rounded-lg bg-gray-800/50 border border-gray-700 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#377DFF] transition-colors"
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
               handleApply();
             }
           }}
         />
-        <Button
+        <button
           onClick={handleApply}
-          variant="accent"
           disabled={!code.trim() || isValidating}
-          className="whitespace-nowrap"
+          className="px-6 h-10 rounded-lg bg-[#377DFF] hover:bg-[#2868dd] disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium transition-colors"
         >
           {isValidating ? 'Validando...' : 'Aplicar'}
-        </Button>
+        </button>
       </div>
+      {error && (
+        <p className="text-red-500 text-xs">{error}</p>
+      )}
     </div>
   );
 }
