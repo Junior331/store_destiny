@@ -16,7 +16,7 @@ export function CartSummary({ serverId }: CartSummaryProps) {
   const { items, getItemCount } = useCart();
 
   const handleCheckout = () => {
-    router.push(`/${serverId}/checkout`);
+    // router.push(`/${serverId}/checkout`);
   };
 
   if (items.length === 0) {

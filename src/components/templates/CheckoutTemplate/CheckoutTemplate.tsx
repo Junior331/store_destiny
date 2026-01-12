@@ -24,12 +24,12 @@ export function CheckoutTemplate({
   useEffect(() => {
     // Redirecionar para /view se carrinho vazio
     if (items.length === 0) {
-      router.push(`/${serverId}/view`);
+      // router.push(`/${serverId}/view`);
     }
   }, [items.length, router, serverId]);
 
   const handleBackToStore = () => {
-    router.push(`/${serverId}/view`);
+    // router.push(`/${serverId}/view`);
   };
 
   if (items.length === 0) {

@@ -44,7 +44,7 @@ export function CheckoutForm({ serverId }: CheckoutFormProps) {
     reset();
     setIsProcessing(false);
 
-    router.push(`/${serverId}/view`);
+    // router.push(`/${serverId}/view`);
   };
 
   return (
