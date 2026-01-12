@@ -9,7 +9,7 @@ interface ShinyButtonProps
 const ShinyButton = React.forwardRef<HTMLButtonElement, ShinyButtonProps>(
   ({ className, children, ...props }, ref) => {
     return (
-      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50">
+      <div className="absolute -bottom-10.5 md:-bottom-8.5 left-1/2 -translate-x-1/2 z-50">
         <span className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <span className="pulse-ring" />
         </span>
@@ -17,7 +17,7 @@ const ShinyButton = React.forwardRef<HTMLButtonElement, ShinyButtonProps>(
         <button
           ref={ref}
           className={cn(
-            "shiny-button relative flex w-[318px] h-[54px] items-center justify-center",
+            "shiny-button relative flex w-[218px] h-[55px] items-center justify-center",
             "rounded-full border border-[#3A94AE] bg-[#2A6C80]",
             "text-white font-medium text-lg",
             "overflow-hidden transition-all duration-300",

@@ -47,14 +47,15 @@ export default function HomePage() {
           </Typography>
         </div>
       </div>
+      <div className='relative'>
+        <ProductGrid products={products} />
 
-      <ProductGrid products={products} />
-
-      {items.length > 0 && (
-        <ShinyButton onClick={handleCheckout}>
-          Finalizar pedido
-        </ShinyButton>
-      )}
+        {items.length > 0 && (
+          <ShinyButton onClick={handleCheckout}>
+            Finalizar pedido
+          </ShinyButton>
+        )}
+      </div>
     </div>
   );
 }

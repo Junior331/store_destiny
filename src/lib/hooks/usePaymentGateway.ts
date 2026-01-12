@@ -53,8 +53,8 @@ export const PAYMENT_GATEWAYS: PaymentGateway[] = [
     active: true,
   },
   {
-    id: 'foxbit',
-    name: 'Foxbit',
+    id: 'coinbase',
+    name: 'Coinbase',
     icon: '🦊',
     fee: 0.5,
     active: true,

@@ -18,7 +18,9 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({
   const [couponError, setCouponError] = useState('');
   const [couponApplied, setCouponApplied] = useState(false);
 
-  const total = cashValue + paymentFee - discount;
+  // Garantir que o total nunca seja negativo
+  const subtotal = cashValue + paymentFee;
+  const total = Math.max(0, subtotal - discount);
 
   const formatCurrency = (value: number) => {
     return value.toLocaleString('pt-BR', {
@@ -39,7 +41,9 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({
         setDiscount(result.discount);
         setCouponApplied(true);
         setCouponError('');
-        onTotalChange?.(cashValue + paymentFee - result.discount);
+        // Garantir que o total nunca seja negativo ao notificar
+        const newTotal = Math.max(0, cashValue + paymentFee - result.discount);
+        onTotalChange?.(newTotal);
       } else {
         setCouponError('Cupom inválido');
         setDiscount(0);
@@ -57,7 +61,7 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({
   };
 
   return (
-    <div className="w-full h-full max-w-[360px] rounded-lg bg-[#0D1B21] border border-[#1E3A47] p-5">
+    <div className="w-full h-full md:max-w-[360px] rounded-lg bg-[#0D1B21] border border-[#1E3A47] p-5">
       {/* Summary rows */}
       <div className="space-y-3">
         {/* Cash */}
@@ -116,14 +120,14 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({
           {couponApplied ? (
             <button
               onClick={handleRemoveCoupon}
-              className="px-4 py-3 text-base font-medium text-red-400 hover:text-red-300 transition-colors"
+              className="px-4 py-3 text-base border rounded-br-lg rounded-tr-lg border-l-0 border-red-600/20 bg-red-600/20 font-medium text-red-400  hover:text-red-300 transition-colors"
             >
               Remover
             </button>
           ) : (
             <button
               onClick={handleApplyCoupon}
-              className="px-4 py-3 text-base border rounded-br-lg rounded-tr-lg border-l-0 border-[#377dff19] bg-[#377dff19] font-medium text-[#377DFF] transition-colors"
+              className="px-4 py-3 text-base border rounded-br-lg rounded-tr-lg border-l-0 border-[#377dff19] bg-[#377dff19] font-medium text-[#377dff] transition-colors"
             >
               Aplicar
             </button>

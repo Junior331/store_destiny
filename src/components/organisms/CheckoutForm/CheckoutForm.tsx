@@ -2,10 +2,11 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import toast from 'react-hot-toast';
+import { customToast } from '@/components/CustomToast';
 import { CouponInput } from '@/components/molecules/CouponInput';
 import { PaymentGatewaySelector } from '@/components/molecules/PaymentGatewaySelector';
 import { PaymentGateway } from '@/components/atoms/PaymentGatewayButton';
+import { QRPaymentModal } from '@/components/molecules/QRPaymentModal/QRPaymentModal';
 import { useCart } from '@/lib/hooks/useCart';
 import { useCheckoutStore } from '@/store/checkoutStore';
 
@@ -17,53 +18,90 @@ export function CheckoutForm({ serverId }: CheckoutFormProps) {
   const router = useRouter();
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState<PaymentGateway>();
-  const { clearCart } = useCart();
+  const [showPixModal, setShowPixModal] = useState(false);
+  const { clearCart, items } = useCart();
   const { reset } = useCheckoutStore();
+
+  const totalAmount = items.reduce((acc, item) => {
+    const price = item.product.discountedPrice || item.product.originalPrice;
+    return acc + (price * item.quantity);
+  }, 0);
+
+  // Mapeamento de URLs de redirecionamento para cada gateway
+  const paymentGatewayUrls: Record<PaymentGateway, string> = {
+    getnet: '/api/payment/getnet', // Aguardando URL da API
+    stripe: '/api/payment/stripe', // Aguardando URL da API
+    paypal: '/api/payment/paypal', // Aguardando URL da API
+    picpay: '/api/payment/picpay', // Aguardando URL da API
+    pix: '', // PIX usa modal
+    mercadopago: '/api/payment/mercadopago', // Aguardando URL da API
+    coinbase: '/api/payment/coinbase', // Aguardando URL da API
+  };
 
   const handleSubmit = async () => {
     if (!selectedPayment) {
-      toast.error('Selecione um método de pagamento');
+      customToast.error('Selecione um método de pagamento');
+      return;
+    }
+
+    // Se for PIX, abre o modal
+    if (selectedPayment === 'pix') {
+      setShowPixModal(true);
       return;
     }
 
     setIsProcessing(true);
 
-    // Simula processamento do pagamento
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    // Redireciona para o serviço do gateway
+    const redirectUrl = paymentGatewayUrls[selectedPayment];
 
-    toast.success('Pagamento processado com sucesso!');
+    // Aqui você pode fazer uma chamada à API para criar a sessão de pagamento
+    // e receber a URL de redirecionamento do gateway
+    customToast.info('Redirecionando para o pagamento...');
+
+    // Simulação de redirecionamento (substituir pela URL real da API)
+    setTimeout(() => {
+      // window.location.href = redirectUrl; // Descomentar quando tiver as URLs reais
+      customToast.success('Pagamento processado com sucesso!');
+      clearCart();
+      reset();
+      setIsProcessing(false);
+      router.push('/');
+    }, 2000);
+  };
+
+  const handlePixPaymentComplete = () => {
+    setShowPixModal(false);
+    customToast.success('Pagamento processado com sucesso!');
     clearCart();
     reset();
-    setIsProcessing(false);
-
     router.push('/');
   };
 
   return (
-    <div className="space-y-6">
+    <>
+      <div className="space-y-6">
 
-      {/* Payment Method Selection */}
-      <div>
-        <h3 className="text-white text-lg font-semibold mb-4">
-          Escolha o método de pagamento:
-        </h3>
+        {/* Payment Method Selection */}
+        <div>
+          <h3 className="text-white text-lg font-semibold mb-4">
+            Escolha o método de pagamento:
+          </h3>
 
-        <PaymentGatewaySelector
-          value={selectedPayment}
-          onChange={setSelectedPayment}
-        />
+          <PaymentGatewaySelector
+            value={selectedPayment}
+            onChange={setSelectedPayment}
+            onFinalize={handleSubmit}
+          />
+        </div>
       </div>
 
-      {/* Finalize Button */}
-      <div className="pt-4">
-        <button
-          onClick={handleSubmit}
-          disabled={!selectedPayment || isProcessing}
-          className="w-full h-14 rounded-full bg-[#00C9FF] hover:bg-[#00B8EE] disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-lg transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
-        >
-          {isProcessing ? 'Processando...' : 'Finalizar'}
-        </button>
-      </div>
-    </div>
+      {/* PIX Payment Modal */}
+      <QRPaymentModal
+        isOpen={showPixModal}
+        onClose={() => setShowPixModal(false)}
+        amount={totalAmount}
+      />
+    </>
   );
 }

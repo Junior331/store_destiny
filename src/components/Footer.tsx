@@ -1,3 +1,6 @@
+"use client";
+import { customToast } from '@/components/CustomToast';
+
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
@@ -59,7 +62,7 @@ const Footer = () => {
 
           </div>
         </div>
-        <div className="flex flex-col lg:flex-row justify-between items-center gap-8 border-t border-footer-border my-8 py-8">
+        <div className="flex flex-col lg:flex-row justify-between lg:items-center gap-8 border-t border-footer-border my-8 py-8">
           <div>
             <div className="mb-6">
               <p className="text-sm text-footer-foreground leading-relaxed max-w-4xl">
@@ -101,7 +104,12 @@ const Footer = () => {
             </svg>
           </div>
         </div>
-
+<div className="flex gap-2">
+  <button onClick={() => customToast.success('Teste sucesso!')}>Success</button>
+  <button onClick={() => customToast.error('Teste erro!')}>Error</button>
+  <button onClick={() => customToast.warning('Teste aviso!')}>Warning</button>
+  <button onClick={() => customToast.info('Teste info!')}>Info</button>
+</div>
       </div>
     </footer>
   );
