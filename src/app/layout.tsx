@@ -13,6 +13,9 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: 'Loja - Checkout Unificado',
   description: 'Sistema de checkout unificado para servidores',
+  icons: {
+    icon: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({
@@ -22,6 +25,27 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
+      <head>
+        {/* Preload critical assets for instant loading */}
+        <link
+          rel="preload"
+          href="/assets/images/background_destinyShop.svg"
+          as="image"
+          type="image/svg+xml"
+        />
+        <link
+          rel="preload"
+          href="/assets/icons/cursor.svg"
+          as="image"
+          type="image/svg+xml"
+        />
+        <link
+          rel="preload"
+          href="/assets/icons/logo.svg"
+          as="image"
+          type="image/svg+xml"
+        />
+      </head>
       <body className={poppins.className}>
         <ProductCardProvider>
           {children}

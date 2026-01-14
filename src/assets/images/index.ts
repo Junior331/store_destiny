@@ -2,7 +2,7 @@ import cash_10k from "./cash_10k.svg";
 import cash_100k from "./cash_100k.svg";
 import cash_150k from "./cash_150k.svg";
 import fallback from "./placeholder.svg";
-import background_destinyShop from "./background_destinyShop.svg";
+import background_destinyShop from "./background_destinyShop.png";
 
 type ImageObject = {
   src: string;

@@ -93,14 +93,14 @@ export function CheckoutTemplate({
 
             {/* Divisor vertical - aparece apenas no desktop */}
             <div
-              className="w-[156px] h-[1px] md:w-[1px] md:h-[156px]"
+              className="w-[156px] mx-auto h-[1px] md:w-[1px] md:h-[156px]"
               style={{
                 background: 'rgba(243, 243, 243, 0.10)',
               }}
             />
 
             {/* Cart Items Carousel */}
-            <div className="pt-6 md:pt-0 -mx-4 md:mx-0">
+            <div className="pt-12 md:pt-0 -mx-4 md:mx-0">
               <ProductCarousel items={items} />
             </div>
           </div>

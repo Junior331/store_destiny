@@ -100,31 +100,31 @@ const gatewayConfig: Record<PaymentGateway, {
 }> = {
   getnet: {
     icon: <GetnetIcon />,
-    activeColor: "bg-[#E91E63]",
+    activeColor: "!bg-[#E91E63]",
   },
   stripe: {
     icon: <StripeIcon />,
-    activeColor: "bg-[#635BFF]",
+    activeColor: "!bg-[#635BFF]",
   },
   paypal: {
     icon: <PaypalIcon />,
-    activeColor: "bg-[#003087]",
+    activeColor: "!bg-[#003087]",
   },
   picpay: {
     icon: <PicpayIcon />,
-    activeColor: "bg-[#21C25E]",
+    activeColor: "!bg-[#21C25E]",
   },
   pix: {
     icon: <PixIcon />,
-    activeColor: "bg-[#32BCAD]",
+    activeColor: "!bg-[#32BCAD]",
   },
   mercadopago: {
     icon: <MercadopagoIcon />,
-    activeColor: "bg-[#00B1EA]",
+    activeColor: "!bg-[#00B1EA]",
   },
   coinbase: {
     icon: <CoinbaseIcon />,
-    activeColor: "bg-[#F7931A]",
+    activeColor: "!bg-[#F7931A]",
   },
 };
 

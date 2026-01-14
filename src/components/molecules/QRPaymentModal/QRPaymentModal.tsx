@@ -2,7 +2,9 @@
 
 import { X } from "lucide-react";
 import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import QRCode from "qrcode";
+import { gerarQRCodePix } from "@/lib/services/bradesco-pix";
 
 interface QRPaymentModalProps {
   isOpen: boolean;
@@ -17,41 +19,67 @@ export function QRPaymentModal({
   isOpen,
   onClose,
   amount,
-  pixKey = "dda3059f-31a5-40d3-84e1-c945cd08db4a",
-  merchantName = "Destiny Cash",
-  merchantCity = "São Paulo",
+  pixKey = "contato@destinycash.com.br",
+  merchantName = "Destiny Cash Store",
+  merchantCity = "Sao Paulo",
 }: QRPaymentModalProps) {
   const [copied, setCopied] = useState(false);
   const [qrCodeUrl, setQrCodeUrl] = useState("");
   const [pixPayload, setPixPayload] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (isOpen && pixKey) {
-      // Gera o payload PIX dinamicamente
-      const payload = generatePixPayload({
-        pixKey,
-        amount,
-        merchantName,
-        merchantCity,
-      });
-      
-      setPixPayload(payload);
+      setLoading(true);
 
-      // Gera QR Code do payload
-      QRCode.toDataURL(payload, {
-        width: 200,
-        margin: 1,
-        color: {
-          dark: "#000000",
-          light: "#FFFFFF",
-        },
+      // Usa a API do Bradesco para gerar QR Code PIX
+      gerarQRCodePix({
+        valor: amount,
+        chave: pixKey,
+        descricao: "Compra de Cash - Destiny",
+        nomeRecebedor: merchantName,
+        cidadeRecebedor: merchantCity,
       })
-        .then((url) => setQrCodeUrl(url))
-        .catch((err) => console.error(err));
+        .then((response) => {
+          setPixPayload(response.emv);
+
+          // Gera QR Code visual do payload
+          QRCode.toDataURL(response.emv, {
+            width: 200,
+            margin: 1,
+            color: {
+              dark: "#000000",
+              light: "#FFFFFF",
+            },
+          })
+            .then((url) => setQrCodeUrl(url))
+            .catch((err) => console.error(err));
+        })
+        .catch((err) => {
+          console.error("Erro ao gerar QR Code PIX:", err);
+          // Fallback para método local em caso de erro
+          const fallbackPayload = generatePixPayload({
+            pixKey,
+            amount,
+            merchantName,
+            merchantCity,
+          });
+          setPixPayload(fallbackPayload);
+
+          QRCode.toDataURL(fallbackPayload, {
+            width: 200,
+            margin: 1,
+            color: {
+              dark: "#000000",
+              light: "#FFFFFF",
+            },
+          })
+            .then((url) => setQrCodeUrl(url))
+            .catch((err) => console.error(err));
+        })
+        .finally(() => setLoading(false));
     }
   }, [isOpen, pixKey, amount, merchantName, merchantCity]);
-
-  if (!isOpen) return null;
 
   const handleCopyCode = async () => {
     await navigator.clipboard.writeText(pixPayload);
@@ -60,8 +88,31 @@ export function QRPaymentModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 animate-in fade-in duration-200 overflow-y-auto">
-      <div className="relative w-full max-w-3xl rounded-2xl border border-zinc-800 bg-[#1a1a1a] p-4 md:p-6 lg:p-8 shadow-2xl animate-in zoom-in-95 slide-in-from-bottom-4 duration-300 my-auto">
+    <AnimatePresence mode="wait">
+      {isOpen && (
+        <motion.div
+          key="pix-modal-backdrop"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 overflow-y-auto"
+          onClick={onClose}
+        >
+          <motion.div
+            key="pix-modal-content"
+            initial={{ opacity: 0, y: 100, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 100, scale: 0.9 }}
+            transition={{
+              type: "spring",
+              damping: 25,
+              stiffness: 300,
+              duration: 0.4,
+            }}
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-3xl rounded-2xl border border-zinc-800 bg-[#1a1a1a] p-4 md:p-6 lg:p-8 shadow-2xl my-auto"
+          >
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -109,7 +160,11 @@ export function QRPaymentModal({
             {/* QR Code */}
             <div className="flex-shrink-0 flex flex-col items-center">
               <div className="rounded-xl bg-white p-3 md:p-4">
-                {qrCodeUrl ? (
+                {loading ? (
+                  <div className="h-40 w-40 md:h-48 md:w-48 flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+                  </div>
+                ) : qrCodeUrl ? (
                   <img
                     src={qrCodeUrl}
                     alt="QR Code para pagamento"
@@ -120,7 +175,7 @@ export function QRPaymentModal({
                 )}
               </div>
               <p className="mt-3 text-xs md:text-sm text-zinc-400 text-center">
-                Use a câmera do seu celular para escanear
+                {loading ? "Gerando QR Code..." : "Use a câmera do seu celular para escanear"}
               </p>
             </div>
           </div>
@@ -186,8 +241,10 @@ export function QRPaymentModal({
             </button>
           </p>
         </div>
-      </div>
-    </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 

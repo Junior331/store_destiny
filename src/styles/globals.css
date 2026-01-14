@@ -3,7 +3,7 @@
 @layer base {
   body {
     @apply bg-[#0F172A] text-gray-300;
-    background-image: url('../assets/images/background_destinyShop.svg');
+    background-image: url('/assets/images/background_destinyShop.svg');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
