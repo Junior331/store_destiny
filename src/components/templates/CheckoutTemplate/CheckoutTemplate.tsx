@@ -37,7 +37,7 @@ export function CheckoutTemplate({
   }, [items.length, router]);
 
   const handleBackToStore = () => {
-    router.push('/');
+    router.push('/loja');
   };
 
   if (items.length === 0) {

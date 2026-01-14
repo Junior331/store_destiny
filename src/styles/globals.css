@@ -8,6 +8,7 @@
     background-position: center;
     background-attachment: fixed;
     cursor: url('../assets/icons/cursor.svg'), auto;
+    transition: cursor 0.2s ease;
   }
 
   * {
@@ -16,6 +17,45 @@
 
   a, button {
     cursor: url('../assets/icons/cursor.svg'), pointer;
+  }
+
+  /* Loading cursor - círculo de loading */
+  body.loading-cursor,
+  body.loading-cursor * {
+    cursor: wait !important;
+  }
+
+  /* Fix autocomplete - mesmo background do input */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px rgba(38, 38, 38, 0.9) inset !important;
+    -webkit-text-fill-color: #F1F5F9 !important;
+    background-color: rgba(15, 23, 42, 0.6) !important;
+    color: #F1F5F9 !important;
+    filter: none !important;
+    border: 1px solid #d1d5dc;
+  }
+  
+  input:-webkit-autofill {
+    transition: background-color 5000s ease-in-out 0s;
+  }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0px 1000px tansparent inset;
+    -webkit-text-fill-color: #fff;
+  }
+
+  /* Firefox autocomplete fix */
+  input:-moz-autofill,
+  input:-moz-autofill-preview {
+    background-color: rgba(15, 23, 42, 0.6) !important;
+    color: #F1F5F9 !important;
+    filter: none !important;
   }
 }
 
@@ -89,4 +129,21 @@
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    max-height: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    max-height: 200px;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-down {
+  animation: slide-down 0.3s ease-out forwards;
 }

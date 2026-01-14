@@ -1,8 +1,11 @@
 import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 import { Toaster } from 'sonner';
-import Footer from '@/components/Footer';
+import { ConditionalFooter } from '@/components/ConditionalFooter';
+import { ConditionalHeader } from '@/components/ConditionalHeader';
 import { ProductCardProvider } from '@/contexts/ProductCardContext';
+import { LoadingProvider } from '@/contexts/LoadingContext';
+import { StoreInitializer } from '@/components/StoreInitializer';
 import '@/styles/globals.css';
 
 const poppins = Poppins({
@@ -47,16 +50,20 @@ export default function RootLayout({
         />
       </head>
       <body className={poppins.className}>
-        <ProductCardProvider>
-          {children}
-          <Footer />
-          <Toaster
-            position="top-right"
-            expand={true}
-            richColors
-            duration={3000}
-          />
-        </ProductCardProvider>
+        <StoreInitializer />
+        <LoadingProvider>
+          <ProductCardProvider>
+            <ConditionalHeader />
+            {children}
+            <ConditionalFooter />
+            <Toaster
+              position="top-right"
+              expand={true}
+              richColors
+              duration={3000}
+            />
+          </ProductCardProvider>
+        </LoadingProvider>
       </body>
     </html>
   );

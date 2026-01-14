@@ -3,21 +3,43 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/lib/hooks/useCart';
+import { useAuthStore } from '@/store/authStore';
+import { useServerStore } from '@/store/serverStore';
 import { CheckoutTemplate } from '@/components/templates/CheckoutTemplate';
+import { AuthGuard } from '@/components/auth/AuthGuard';
 
 export default function CheckoutPage() {
   const router = useRouter();
   const { items } = useCart();
+  const { isAuthenticated } = useAuthStore();
+  const { selectedServer } = useServerStore();
 
   useEffect(() => {
-    if (items.length === 0) {
-      router.push('/');
+    if (!isAuthenticated) {
+      router.push('/login');
+      return;
     }
-  }, [items.length, router]);
 
-  if (items.length === 0) {
+    if (!selectedServer) {
+      router.push('/select-server');
+      return;
+    }
+
+    if (items.length === 0) {
+      router.push('/loja');
+    }
+  }, [items.length, isAuthenticated, selectedServer, router]);
+
+  if (!isAuthenticated || !selectedServer || items.length === 0) {
     return null;
   }
 
-  return <CheckoutTemplate serverId="default" serverName="Loja Virtual" />;
+  return (
+    <AuthGuard>
+      <CheckoutTemplate 
+        serverId={selectedServer.id} 
+        serverName={selectedServer.name} 
+      />
+    </AuthGuard>
+  );
 }

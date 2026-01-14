@@ -10,8 +10,19 @@ const config: Config = {
     extend: {
       colors: {
         primary: '#3B82F6',
+        'primary-foreground': '#FFFFFF',
         secondary: '#1E293B',
         accent: '#10B981',
+        card: {
+          DEFAULT: 'rgba(15, 23, 42, 0.95)',
+          foreground: '#F1F5F9',
+        },
+        muted: {
+          DEFAULT: '#1E293B',
+          foreground: '#94A3B8',
+        },
+        border: '#1E293B',
+        input: '#0F172A',
         footer: {
           DEFAULT: '#0A0E1A',
           foreground: '#94A3B8',

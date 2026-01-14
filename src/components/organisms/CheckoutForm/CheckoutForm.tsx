@@ -9,6 +9,7 @@ import { PaymentGateway } from '@/components/atoms/PaymentGatewayButton';
 import { QRPaymentModal } from '@/components/molecules/QRPaymentModal/QRPaymentModal';
 import { useCart } from '@/lib/hooks/useCart';
 import { useCheckoutStore } from '@/store/checkoutStore';
+import { useLoading } from '@/contexts/LoadingContext';
 
 export interface CheckoutFormProps {
   serverId: string;
@@ -21,6 +22,7 @@ export function CheckoutForm({ serverId }: CheckoutFormProps) {
   const [showPixModal, setShowPixModal] = useState(false);
   const { clearCart, items } = useCart();
   const { reset } = useCheckoutStore();
+  const { addLoading, removeLoading } = useLoading();
 
   const totalAmount = items.reduce((acc, item) => {
     const price = item.product.discountedPrice || item.product.originalPrice;
@@ -51,6 +53,7 @@ export function CheckoutForm({ serverId }: CheckoutFormProps) {
     }
 
     setIsProcessing(true);
+    const loadingId = addLoading();
 
     // Redireciona para o serviço do gateway
     const redirectUrl = paymentGatewayUrls[selectedPayment];
@@ -66,16 +69,21 @@ export function CheckoutForm({ serverId }: CheckoutFormProps) {
       clearCart();
       reset();
       setIsProcessing(false);
-      router.push('/');
+      removeLoading(loadingId);
+      router.push('/loja');
     }, 2000);
   };
 
   const handlePixPaymentComplete = () => {
+    const loadingId = addLoading();
     setShowPixModal(false);
     customToast.success('Pagamento processado com sucesso!');
     clearCart();
     reset();
-    router.push('/');
+    setTimeout(() => {
+      removeLoading(loadingId);
+      router.push('/loja');
+    }, 500);
   };
 
   return (
