@@ -3,16 +3,13 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Server } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { useServerStore } from '@/store/serverStore';
 import { getAllProducts } from '@/lib/data/mockProducts';
 import { Typography } from '@/components/atoms/Typography';
 import { ShinyButton } from '@/components/atoms/ShinyButton';
-import { Button } from '@/components/atoms/Button';
 import { ProductGrid } from '@/components/organisms/ProductGrid';
 import { useCart } from '@/lib/hooks/useCart';
-import { PageLoader } from '@/components/atoms/PageLoader';
 import { AuthGuard } from '@/components/auth/AuthGuard';
 import { useLoading } from '@/contexts/LoadingContext';
 
@@ -32,10 +29,6 @@ export default function LojaPage() {
   const { isAuthenticated } = useAuthStore();
   const { selectedServer } = useServerStore();
   const { addLoading, removeLoading } = useLoading();
-
-  const handleChangeServer = () => {
-    router.push('/select-server');
-  };
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -63,7 +56,8 @@ export default function LojaPage() {
     if (selectedServer) {
       loadProducts();
     }
-  }, [selectedServer, addLoading, removeLoading]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedServer]);
 
   const handleCheckout = () => {
     if (items.length > 0) {
@@ -84,19 +78,6 @@ export default function LojaPage() {
           transition={{ duration: 0.5 }}
           className="mb-8 space-y-6"
         >
-          {/* Botão para trocar servidor */}
-          <div className="flex justify-end">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleChangeServer}
-              className="text-muted-foreground hover:text-card-foreground"
-            >
-              <Server size={16} className="mr-2" />
-              Trocar servidor
-            </Button>
-          </div>
-
           {/* Tabs customizadas com scroll */}
           <div className="relative">
             <div className="overflow-x-auto scrollbar-hide -mx-4 px-4 md:mx-0 md:overflow-visible md:px-0">
