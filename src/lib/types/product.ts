@@ -1,4 +1,4 @@
-export type ProductRarity = 'common' | 'rare' | 'epic';
+export type ProductRarity = 'common' | 'rare' | 'epic' | 'lendary'| 'super_lendary';
 
 export interface Product {
   id: string;

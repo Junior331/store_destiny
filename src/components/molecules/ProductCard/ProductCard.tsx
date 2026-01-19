@@ -49,6 +49,20 @@ const RARITY_COLORS: Record<
     hoverGlow:
       "radial-gradient(50% 40% at 50% 50%, hsla(262, 58%, 66%, 0.3) 0%, rgba(24, 61, 72, 0.00) 100%)",
   },
+  lendary: {
+    border: "#27232F",
+    gradientStart: "#9663F0",
+    gradientEnd: "#9B77DB",
+    hoverGlow:
+      "radial-gradient(50% 40% at 50% 50%, hsla(262, 58%, 66%, 0.3) 0%, rgba(24, 61, 72, 0.00) 100%)",
+  },
+  super_lendary: {
+    border: "#27232F",
+    gradientStart: "#9663F0",
+    gradientEnd: "#9B77DB",
+    hoverGlow:
+      "radial-gradient(50% 40% at 50% 50%, hsla(262, 58%, 66%, 0.3) 0%, rgba(24, 61, 72, 0.00) 100%)",
+  },
 };
 
 export function ProductCard({
@@ -250,7 +264,7 @@ export function ProductCard({
 
       <div className="relative z-10 p-3 pb-4 flex flex-col">
         <div
-          className={`flex items-center -mt-[35px] -ml-[14px] mb-2 ${
+          className={`flex items-center -mt-[34px] -ml-[14px] mb-2 ${
             className || ""
           }`}
         >
@@ -275,7 +289,7 @@ export function ProductCard({
             </p>
           </div>
 
-          {!showButton ? (
+          {!checkoutMode && !showButton ? (
             <div className="flex items-center gap-2">
               <div className="bg-[#6d747b19] group-hover/card:bg-[#377DFF] transition-colors duration-300 rounded-full px-3 py-1.5 inline-flex items-center gap-2">
                 <span className="text-gray-400 group-hover/card:text-white transition-colors duration-300 text-sm font-medium">
@@ -303,7 +317,7 @@ export function ProductCard({
               )}
             </div>
           ) : (
-            showButton && (
+            !checkoutMode && showButton && (
               <div className="relative max-w-32 py-1 px-0.5 z-50">
                 <span className="absolute inset-0 flex items-center justify-center pointer-events-none">
                   <span className="pulse-ring" />

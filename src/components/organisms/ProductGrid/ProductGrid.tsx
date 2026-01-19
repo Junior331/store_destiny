@@ -34,7 +34,7 @@ const EmptyState = () => (
 
 const MotionGridContainer = ({
   children,
-  className = "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8"
+  className = "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-8"
 }: {
   children: React.ReactNode;
   className?: string;
@@ -71,10 +71,13 @@ const MotionGridItem = ({ children }: { children: React.ReactNode }) => (
 );
 
 export function ProductGrid({ products, loading = false }: ProductGridProps) {
+  console.log('ProductGrid - Total de produtos:', products.length);
+  console.log('ProductGrid - Produtos:', products);
+
   if (loading) {
     return (
       <MotionGridContainer>
-        {Array.from({ length: 8 }).map((_, index) => (
+        {Array.from({ length: 10 }).map((_, index) => (
           <MotionGridItem key={index}>
             <ProductCardSkeleton />
           </MotionGridItem>

@@ -8,7 +8,6 @@ import AuthInput from '@/components/auth/AuthInput';
 import AuthButton from '@/components/auth/AuthButton';
 import AuthLink from '@/components/auth/AuthLink';
 import AuthCheckbox from '@/components/auth/AuthCheckbox';
-import AuthLogo from '@/components/auth/AuthLogo';
 import { useAuthStore } from '@/store/authStore';
 import { useServerStore } from '@/store/serverStore';
 import { useLoading } from '@/contexts/LoadingContext';
@@ -59,12 +58,10 @@ const Login: React.FC = () => {
         const needs2FA = Math.random() > 0.5; // Simula necessidade de 2FA
 
         if (needs2FA) {
-          router.push('/verification?type=2fa');
+          router.push('/verification?type=2fa' as any);
         } else {
           router.push('/loja');
         }
-      } else {
-        alert('Credenciais inválidas');
         setShowTurnstile(false);
       }
     } catch (error) {
