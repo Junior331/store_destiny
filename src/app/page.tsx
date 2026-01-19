@@ -13,15 +13,11 @@ export default function HomePage() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      if (selectedServer) {
-        router.push('/loja' as any);
-      } else {
-        router.push('/select-server' as any);
-      }
+      router.push('/loja' as any);
     } else {
       router.push('/login' as any);
     }
-  }, [isAuthenticated, selectedServer, router]);
+  }, [isAuthenticated, router]);
 
   return <PageLoader isLoading={true} />;
 }

@@ -6,7 +6,6 @@ import AuthLayout from '@/components/auth/AuthLayout';
 import AuthInput from '@/components/auth/AuthInput';
 import AuthButton from '@/components/auth/AuthButton';
 import AuthLink from '@/components/auth/AuthLink';
-import AuthLogo from '@/components/auth/AuthLogo';
 import { useAuthStore } from '@/store/authStore';
 import { useLoading } from '@/contexts/LoadingContext';
 
@@ -35,17 +34,17 @@ const ForgotPassword: React.FC = () => {
   };
 
   return (
-    <AuthLayout logo={<AuthLogo className="w-16 h-16 text-card-foreground" />}>
-      <h1 className="text-xl font-semibold text-card-foreground text-center mb-4">
+    <AuthLayout >
+      <h1 className="text-lg font-semibold text-white text-center mb-4">
         Esqueci minha senha!
       </h1>
       
-      <p className="text-muted-foreground text-sm text-center mb-6">
+      <p className="text-[#A6A6A6] text-sm mb-6">
         Insira seu e-mail ou usuário cadastrado para recuperação da conta. 
         Você receberá um e-mail com instruções de redefinição de senha.
       </p>
       
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-6">
         <AuthInput
           type="text"
           placeholder="Endereço de e-mail ou usuário"
@@ -60,9 +59,9 @@ const ForgotPassword: React.FC = () => {
       </form>
       
       <div className="mt-6 text-center">
-        <p className="text-muted-foreground text-sm">
+        <p className="text-[#A6A6A6] text-sm">
           Lembra sua senha?{' '}
-          <AuthLink href="/login">Fazer login</AuthLink>
+          <AuthLink href="/login" className='underline'>Fazer login</AuthLink>
         </p>
       </div>
     </AuthLayout>

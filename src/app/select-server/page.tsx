@@ -7,7 +7,6 @@ import { useServerStore, Server } from '@/store/serverStore';
 import { useAuthStore } from '@/store/authStore';
 import AuthLayout from '@/components/auth/AuthLayout';
 import AuthButton from '@/components/auth/AuthButton';
-import AuthLogo from '@/components/auth/AuthLogo';
 import { AuthGuard } from '@/components/auth/AuthGuard';
 import { useLoading } from '@/contexts/LoadingContext';
 
@@ -49,12 +48,12 @@ const SelectServerPage = () => {
 
   return (
     <AuthGuard>
-      <AuthLayout logo={<AuthLogo className="w-16 h-16 text-card-foreground" />}>
-        <h1 className="text-xl font-semibold text-card-foreground text-center mb-4">
+      <AuthLayout >
+        <h1 className="text-lg font-semibold text-white text-center mb-4">
           Selecione seu servidor
         </h1>
 
-        <p className="text-muted-foreground text-sm text-center mb-6">
+        <p className="text-[#A6A6A6] text-sm mb-6">
           Escolha o servidor onde deseja fazer suas compras
         </p>
 
@@ -71,17 +70,17 @@ const SelectServerPage = () => {
                 ${
                   selectedId === server.id
                     ? 'border-primary bg-primary/10'
-                    : 'border-border bg-card hover:border-primary/50'
+                    : 'border-border bg-[#1a1a1a] hover:border-primary/50'
                 }
               `}
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-card-foreground font-semibold">
+                  <h3 className="text-white font-semibold">
                     {server.name}
                   </h3>
                   {server.description && (
-                    <p className="text-muted-foreground text-sm mt-1">
+                    <p className="text-[#A6A6A6] text-sm mt-1">
                       {server.description}
                     </p>
                   )}

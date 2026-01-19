@@ -14,7 +14,7 @@ const AuthLink: React.FC<AuthLinkProps> = ({ children, className, ...props }) =>
     <Link
       {...props}
       className={cn(
-        "text-primary hover:text-primary/80 underline underline-offset-2",
+        "text-white hover:text-white/80",
         "transition-colors duration-200",
         className
       )}

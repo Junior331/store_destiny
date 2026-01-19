@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { Turnstile } from '@marsidev/react-turnstile';
 import AuthLayout from '@/components/auth/AuthLayout';
 import AuthInput from '@/components/auth/AuthInput';
 import AuthButton from '@/components/auth/AuthButton';
@@ -18,39 +19,57 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string>('');
+  const [showTurnstile, setShowTurnstile] = useState(false);
   const { login, isAuthenticated } = useAuthStore();
   const { selectedServer } = useServerStore();
   const { addLoading, removeLoading } = useLoading();
 
   useEffect(() => {
     if (isAuthenticated) {
-      if (selectedServer) {
-        router.push('/loja');
-      } else {
-        router.push('/select-server');
-      }
+      router.push('/loja');
     }
-  }, [isAuthenticated, selectedServer, router]);
+  }, [isAuthenticated, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!email || !password) {
+      alert('Preencha todos os campos');
+      return;
+    }
+
+    // Mostra o Turnstile
+    setShowTurnstile(true);
+  };
+
+  const handleTurnstileSuccess = async (token: string) => {
+    setTurnstileToken(token);
     setIsLoading(true);
     const loadingId = addLoading();
-    
+
     try {
+      // Simula delay
+      await new Promise(resolve => setTimeout(resolve, 400));
+
       const success = await login(email, password);
       if (success) {
-        // Redirecionamento será feito pelo useEffect
-        if (selectedServer) {
-          router.push('/loja');
+        // Redireciona para página de verificação
+        // Em produção, você verificaria se precisa de 2FA baseado na resposta do backend
+        const needs2FA = Math.random() > 0.5; // Simula necessidade de 2FA
+
+        if (needs2FA) {
+          router.push('/verification?type=2fa');
         } else {
-          router.push('/select-server');
+          router.push('/loja');
         }
       } else {
         alert('Credenciais inválidas');
+        setShowTurnstile(false);
       }
     } catch (error) {
       alert('Erro ao fazer login. Tente novamente.');
+      setShowTurnstile(false);
     } finally {
       setIsLoading(false);
       removeLoading(loadingId);
@@ -62,12 +81,12 @@ const Login: React.FC = () => {
   }
 
   return (
-    <AuthLayout logo={<AuthLogo className="w-16 h-16 text-card-foreground" />}>
-      <h1 className="text-xl font-semibold text-card-foreground text-center mb-6">
-        Entre com a sua conta
+    <AuthLayout >
+      <h1 className="text-[18px] font-semibold text-white text-center mb-[32px] leading-tight">
+        Entre com a sua conta Destiny
       </h1>
-      
-      <form onSubmit={handleSubmit} className="space-y-4">
+
+      <form onSubmit={handleSubmit} className="space-y-[18px]">
         <AuthInput
           type="text"
           placeholder="Usuário ou e-mail"
@@ -75,7 +94,7 @@ const Login: React.FC = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        
+
         <AuthInput
           isPassword
           placeholder="Senha"
@@ -83,32 +102,51 @@ const Login: React.FC = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        
-        <div className="flex items-center justify-between">
+
+        <div className="flex items-center justify-between pt-[2px]">
           <AuthCheckbox
             id="remember"
             label="Lembrar senha"
             checked={rememberMe}
             onChange={setRememberMe}
+            tooltip="Sua senha neste dispositivo de acesso será armazenada nas próxima sessões."
           />
-          <AuthLink href="/forgot-password">Esqueceu a senha?</AuthLink>
+          <AuthLink href="/forgot-password" className="text-[14px] underline">Esqueceu a senha?</AuthLink>
         </div>
-        
-        <AuthButton type="submit" isLoading={isLoading}>
-          Entrar na minha conta
-        </AuthButton>
+
+        {showTurnstile && (
+          <div className="flex justify-center py-4">
+            <Turnstile
+              siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000AA'}
+              onSuccess={handleTurnstileSuccess}
+              onError={() => {
+                setShowTurnstile(false);
+                alert('Erro ao verificar. Tente novamente.');
+              }}
+              options={{
+                theme: 'dark',
+              }}
+            />
+          </div>
+        )}
+
+        <div className="pt-[8px]">
+          <AuthButton type="submit" isLoading={isLoading}>
+            Entrar na minha conta
+          </AuthButton>
+        </div>
       </form>
-      
-      <div className="mt-6 flex justify-center gap-4 text-sm">
-        <AuthLink href="/privacy">Política de privacidade</AuthLink>
-        <AuthLink href="/terms">Termos de uso</AuthLink>
-      </div>
-      
-      <div className="mt-6 text-center">
-        <p className="text-muted-foreground text-sm">
-          Ainda não tem uma conta?{' '}
-          <AuthLink href="/register">Criar conta</AuthLink>
+
+      <ul className="mt-[28px] flex justify-center gap-[24px] text-[13px]">
+        <li><AuthLink href="/privacy" className="underline text-sm">Política de privacidade</AuthLink></li>
+        <li><AuthLink href="/terms" className="underline text-sm">Termos de uso</AuthLink></li>
+      </ul>
+
+      <div className="mt-[24px] text-center">
+        <p className="text-[#A8A8A8] text-[14px] mb-[6px]">
+          Ainda não tem uma conta?
         </p>
+        <AuthLink href="/register" className="text-[14px] underline">Criar conta</AuthLink>
       </div>
     </AuthLayout>
   );

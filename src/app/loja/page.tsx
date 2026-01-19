@@ -35,12 +35,7 @@ export default function LojaPage() {
       router.push('/login');
       return;
     }
-
-    if (!selectedServer) {
-      router.push('/select-server');
-      return;
-    }
-  }, [isAuthenticated, selectedServer, router]);
+  }, [isAuthenticated, router]);
 
   useEffect(() => {
     // Simula carregamento inicial
@@ -53,11 +48,9 @@ export default function LojaPage() {
       removeLoading(loadingId);
     };
 
-    if (selectedServer) {
-      loadProducts();
-    }
+    loadProducts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedServer]);
+  }, []);
 
   const handleCheckout = () => {
     if (items.length > 0) {
@@ -65,7 +58,7 @@ export default function LojaPage() {
     }
   };
 
-  if (!isAuthenticated || !selectedServer) {
+  if (!isAuthenticated) {
     return null;
   }
 

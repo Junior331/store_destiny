@@ -7,7 +7,6 @@ import AuthInput from '@/components/auth/AuthInput';
 import AuthButton from '@/components/auth/AuthButton';
 import AuthLink from '@/components/auth/AuthLink';
 import AuthCheckbox from '@/components/auth/AuthCheckbox';
-import AuthLogo from '@/components/auth/AuthLogo';
 import { useAuthStore } from '@/store/authStore';
 import { useLoading } from '@/contexts/LoadingContext';
 
@@ -72,12 +71,12 @@ const Register: React.FC = () => {
   };
 
   return (
-    <AuthLayout logo={<AuthLogo className="w-16 h-16 text-card-foreground" />}>
-      <h1 className="text-xl font-semibold text-card-foreground text-center mb-6">
+    <AuthLayout className='max-w-[445px]'>
+      <h1 className="text-[22px] font-semibold text-white text-center mb-[32px] leading-tight">
         Criando conta
       </h1>
-      
-      <form onSubmit={handleSubmit} className="space-y-4">
+
+      <form onSubmit={handleSubmit} className="space-y-[18px]">
         <AuthInput
           type="text"
           placeholder="Crie seu nome de usuário"
@@ -85,7 +84,7 @@ const Register: React.FC = () => {
           onChange={(e) => setUsername(e.target.value)}
           required
         />
-        
+
         <AuthInput
           type="email"
           placeholder="Endereço de e-mail"
@@ -93,7 +92,7 @@ const Register: React.FC = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        
+
         <AuthInput
           isPassword
           showPasswordHints
@@ -102,7 +101,7 @@ const Register: React.FC = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        
+
         <AuthInput
           isPassword
           placeholder="Confirme sua senha"
@@ -110,31 +109,35 @@ const Register: React.FC = () => {
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
         />
-        
-        <AuthCheckbox
-          id="terms"
-          label={
-            <span>
-              Aceitar{' '}
-              <AuthLink href="/terms">termo de uso</AuthLink>
-              {' '}e{' '}
-              <AuthLink href="/privacy">política de privacidade</AuthLink>
-            </span>
-          }
-          checked={acceptTerms}
-          onChange={setAcceptTerms}
-        />
-        
-        <AuthButton type="submit" isLoading={isLoading}>
-          Criar conta
-        </AuthButton>
+
+        <div className="pt-[4px]">
+          <AuthCheckbox
+            id="terms"
+            label={
+              <span className="text-[#A8A8A8]">
+                Aceitar{' '}
+                <AuthLink href="/terms" className="underline text-sm">termo de uso</AuthLink>
+                {' '}e{' '}
+                <AuthLink href="/privacy" className="underline text-sm">política de privacidade</AuthLink>
+              </span>
+            }
+            checked={acceptTerms}
+            onChange={setAcceptTerms}
+          />
+        </div>
+
+        <div className="pt-[8px]">
+          <AuthButton type="submit" isLoading={isLoading}>
+            Criar conta
+          </AuthButton>
+        </div>
       </form>
-      
-      <div className="mt-6 text-center">
-        <p className="text-muted-foreground text-sm">
-          Já tenho uma conta.{' '}
-          <AuthLink href="/login">Fazer login</AuthLink>
+
+      <div className="mt-[24px] text-center">
+        <p className="text-[#A8A8A8] text-[14px] mb-[6px]">
+          Já tenho uma conta no Destiny Community.
         </p>
+        <AuthLink href="/login" className="text-[14px] underline">Fazer login</AuthLink>
       </div>
     </AuthLayout>
   );

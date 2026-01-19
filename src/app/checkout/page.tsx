@@ -20,25 +20,20 @@ export default function CheckoutPage() {
       return;
     }
 
-    if (!selectedServer) {
-      router.push('/select-server');
-      return;
-    }
-
     if (items.length === 0) {
       router.push('/loja');
     }
-  }, [items.length, isAuthenticated, selectedServer, router]);
+  }, [items.length, isAuthenticated, router]);
 
-  if (!isAuthenticated || !selectedServer || items.length === 0) {
+  if (!isAuthenticated || items.length === 0) {
     return null;
   }
 
   return (
     <AuthGuard>
-      <CheckoutTemplate 
-        serverId={selectedServer.id} 
-        serverName={selectedServer.name} 
+      <CheckoutTemplate
+        serverId={selectedServer?.id || ''}
+        serverName={selectedServer?.name || 'Servidor'}
       />
     </AuthGuard>
   );
