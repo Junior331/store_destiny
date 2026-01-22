@@ -61,48 +61,41 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({
   };
 
   return (
-    <div className="w-full h-full md:max-w-[360px] rounded-lg bg-[#0D1B21] border border-[#1E3A47] p-5">
-      {/* Summary rows */}
+    <div className="w-full h-full xl:max-w-[360px] rounded-lg bg-[#1e2022f2] border border-[#6d747b19] p-5">
       <div className="space-y-3">
-        {/* Cash */}
         <div className="flex justify-between items-center">
-          <span className="text-[#8B9DA7] text-base">Cash</span>
-          <span className="text-white text-base font-medium">
+          <span className="text-[#6D747B] text-base">Cash</span>
+          <span className="text-[#C5C8CC] text-base font-medium">
             {cashValue.toLocaleString('pt-BR')}
           </span>
         </div>
 
-        {/* Payment fee */}
         <div className="flex justify-between items-center">
-          <span className="text-[#8B9DA7] text-base">Taxa de pagamento</span>
-          <span className="text-[#8B9DA7] text-base">
+          <span className="text-[#6D747B] text-base">Taxa de pagamento</span>
+          <span className="text-[#C5C8CC] text-base">
             {formatCurrency(paymentFee)}
           </span>
         </div>
 
-        {/* Discount */}
         <div className="flex justify-between items-center">
-          <span className="text-[#8B9DA7] text-base">Desconto</span>
-          <span className={`text-base ${discount > 0 ? 'text-green-400' : 'text-[#8B9DA7]'}`}>
+          <span className="text-[#6D747B] text-base">Desconto</span>
+          <span className='text-base text-[#C5C8CC]'>
             {discount > 0 ? `- ${formatCurrency(discount)}` : '-'}
           </span>
         </div>
 
-        {/* Divider */}
         <div className="border-t border-[#1E3A47] my-2" />
 
-        {/* Total */}
         <div className="flex justify-between items-center">
-          <span className="text-white text-base font-medium">Valor total</span>
-          <span className="text-white text-lg font-bold">
+          <span className="text-[#91989E] text-base font-medium">Valor total</span>
+          <span className="text-[#F3F3F3] text-lg font-bold">
             {formatCurrency(total)}
           </span>
         </div>
       </div>
 
-      {/* Coupon section */}
       <div className="mt-14">
-        <p className="text-white text-base mb-3">Tem um cupom?</p>
+        <p className="text-[#91989E] text-base mb-3">Tem um cupom?</p>
 
         <div className="flex flex-col sm:flex-row gap-y-2">
           <div className="flex flex-1">

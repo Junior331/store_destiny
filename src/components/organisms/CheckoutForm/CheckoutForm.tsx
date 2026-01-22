@@ -90,7 +90,6 @@ export function CheckoutForm({ serverId }: CheckoutFormProps) {
     <>
       <div className="space-y-6">
 
-        {/* Payment Method Selection */}
         <div>
           <h3 className="text-white text-lg font-semibold mb-4">
             Escolha o método de pagamento:
@@ -104,7 +103,6 @@ export function CheckoutForm({ serverId }: CheckoutFormProps) {
         </div>
       </div>
 
-      {/* PIX Payment Modal */}
       <QRPaymentModal
         isOpen={showPixModal}
         onClose={() => setShowPixModal(false)}

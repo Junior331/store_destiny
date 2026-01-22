@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import { cn } from '@/lib/utils/cn';
 
@@ -22,9 +22,14 @@ const AuthInput: React.FC<AuthInputProps> = ({
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
+  const [hasValue, setHasValue] = useState(false);
 
   const inputType = isPassword ? (showPassword ? 'text' : 'password') : type;
-  const hasValue = value && String(value).length > 0;
+
+  // Atualiza hasValue quando o valor muda
+  useEffect(() => {
+    setHasValue(value !== undefined && value !== null && String(value).length > 0);
+  }, [value]);
 
   return (
     <div className="w-full">
@@ -33,11 +38,11 @@ const AuthInput: React.FC<AuthInputProps> = ({
           type={inputType}
           value={value}
           className={cn(
-            "w-full h-[58px] p-[30px_20px_10px_20px] bg-transparent rounded-[4px] border border-[#5A5A5A]",
+            "w-full h-[58px] pt-[30px] pr-[20px] pb-[10px] pl-[20px] bg-transparent rounded-[4px] border border-[#5A5A5A]",
             "text-white text-[15px] placeholder:text-transparent",
             "focus:outline-none focus:border-[#7A7A7A]",
             "transition-all duration-200",
-            isPassword && "pr-12",
+            isPassword && "!pr-12",
             className
           )}
           onFocus={() => setIsFocused(true)}

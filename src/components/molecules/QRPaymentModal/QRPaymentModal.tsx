@@ -113,7 +113,6 @@ export function QRPaymentModal({
             onClick={(e) => e.stopPropagation()}
             className="relative w-full max-w-3xl rounded-2xl border border-zinc-800 bg-[#1a1a1a] p-4 md:p-6 lg:p-8 shadow-2xl my-auto"
           >
-        {/* Close Button */}
         <button
           onClick={onClose}
           className="absolute right-4 top-4 md:right-6 md:top-6 rounded-full bg-zinc-800 p-2 text-zinc-400 transition-colors hover:bg-zinc-700 hover:text-white z-10"
@@ -121,7 +120,6 @@ export function QRPaymentModal({
           <X className="h-5 w-5" />
         </button>
 
-        {/* Header Section */}
         <div className="mb-6 md:mb-8">
           <h2 className="mb-4 md:mb-6 text-xl md:text-2xl lg:text-3xl font-bold leading-tight text-white text-center md:text-left">
             Escaneie o Código QR para pagar{" "}
@@ -129,7 +127,6 @@ export function QRPaymentModal({
           </h2>
 
           <div className="flex flex-col lg:flex-row gap-6 md:gap-8">
-            {/* Text Content */}
             <div className="flex-1">
               <ol className="space-y-2 text-white text-sm md:text-base">
                 <li className="flex items-start gap-2">
@@ -157,7 +154,6 @@ export function QRPaymentModal({
               </p>
             </div>
 
-            {/* QR Code */}
             <div className="flex-shrink-0 flex flex-col items-center">
               <div className="rounded-xl bg-white p-3 md:p-4">
                 {loading ? (
@@ -181,10 +177,8 @@ export function QRPaymentModal({
           </div>
         </div>
 
-        {/* Divider */}
         <div className="my-6 md:my-8 h-px bg-zinc-800" />
 
-        {/* Copy Code Section */}
         <div>
           <h3 className="mb-3 md:mb-4 text-lg md:text-xl font-semibold text-white">
             Ou copie o código PIX para pagar
@@ -211,7 +205,6 @@ export function QRPaymentModal({
             </button>
           </div>
 
-          {/* Informações úteis */}
           <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-2 text-xs md:text-sm">
             <div className="p-3 rounded-lg bg-zinc-900/30">
               <p className="text-zinc-500">Chave PIX:</p>
@@ -223,7 +216,6 @@ export function QRPaymentModal({
             </div>
           </div>
 
-          {/* Aviso mobile */}
           <div className="mt-4 md:hidden p-3 bg-blue-900/20 border border-blue-800/30 rounded-lg">
             <p className="text-xs text-blue-300 flex items-center gap-2">
               <span className="text-sm">📱</span>
@@ -232,7 +224,6 @@ export function QRPaymentModal({
           </div>
         </div>
 
-        {/* Botão de ajuda */}
         <div className="mt-6 pt-4 border-t border-zinc-800">
           <p className="text-xs text-zinc-500 text-center">
             Precisa de ajuda?{" "}

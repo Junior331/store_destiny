@@ -15,7 +15,6 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children, className, logo=<Auth
 
   return (
     <div className="min-h-screen w-full relative">
-      {/* Container principal com overlay usando ::before */}
       <div className="relative before:content-[''] before:fixed before:inset-0 before:bg-[rgba(12,12,12,0.10)]">
         <div
           className="min-h-screen w-full flex items-center justify-center p-4 bg-cover bg-center bg-no-repeat"

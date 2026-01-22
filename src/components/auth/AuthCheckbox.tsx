@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils/cn';
 
@@ -21,6 +21,23 @@ const AuthCheckbox: React.FC<AuthCheckboxProps> = ({
   className,
   tooltip
 }) => {
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  useEffect(() => {
+    if (checked && tooltip) {
+      setShowTooltip(true);
+
+      // Remove o tooltip após 3 segundos
+      const timer = setTimeout(() => {
+        setShowTooltip(false);
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    } else {
+      setShowTooltip(false);
+    }
+  }, [checked, tooltip]);
+
   return (
     <div className="relative">
       <label
@@ -44,7 +61,7 @@ const AuthCheckbox: React.FC<AuthCheckboxProps> = ({
         <span className="text-[14px] text-[#A8A8A8]">{label}</span>
       </label>
 
-      {tooltip && checked && (
+      {tooltip && showTooltip && (
         <div className="absolute left-0 top-full mt-[8px] w-[133px] bg-[#3B3B3B] rounded-[6px] p-2 shadow-lg z-10 animate-slide-down">
           <p className="text-[10px] text-[#A8A8A8] leading-[1.4] text-center">
             {tooltip}

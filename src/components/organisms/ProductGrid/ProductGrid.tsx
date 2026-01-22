@@ -41,29 +41,22 @@ const MotionGridContainer = ({
 }) => (
   <motion.div
     className={className}
-    initial="hidden"
-    animate="visible"
-    variants={{
-      hidden: { opacity: 0 },
-      visible: {
-        opacity: 1,
-        transition: { staggerChildren: 0.1 },
-      },
-    }}
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ duration: 0.3 }}
   >
     {children}
   </motion.div>
 );
 
-const MotionGridItem = ({ children }: { children: React.ReactNode }) => (
+const MotionGridItem = ({ children, index }: { children: React.ReactNode; index: number }) => (
   <motion.div
-    variants={{
-      hidden: { opacity: 0, y: 20 },
-      visible: {
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.4, ease: "easeOut" },
-      },
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{
+      duration: 0.3,
+      delay: index * 0.05,
+      ease: "easeOut",
     }}
   >
     {children}
@@ -71,14 +64,11 @@ const MotionGridItem = ({ children }: { children: React.ReactNode }) => (
 );
 
 export function ProductGrid({ products, loading = false }: ProductGridProps) {
-  console.log('ProductGrid - Total de produtos:', products.length);
-  console.log('ProductGrid - Produtos:', products);
-
   if (loading) {
     return (
       <MotionGridContainer>
         {Array.from({ length: 10 }).map((_, index) => (
-          <MotionGridItem key={index}>
+          <MotionGridItem key={index} index={index}>
             <ProductCardSkeleton />
           </MotionGridItem>
         ))}
@@ -92,8 +82,8 @@ export function ProductGrid({ products, loading = false }: ProductGridProps) {
 
   return (
     <MotionGridContainer>
-      {products.map((product) => (
-        <MotionGridItem key={product.id}>
+      {products.map((product, index) => (
+        <MotionGridItem key={product.id} index={index}>
           <ProductCard product={product} imageClassName="w-[134px] h-auto" />
         </MotionGridItem>
       ))}

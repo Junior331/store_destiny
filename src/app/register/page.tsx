@@ -9,6 +9,7 @@ import AuthLink from '@/components/auth/AuthLink';
 import AuthCheckbox from '@/components/auth/AuthCheckbox';
 import { useAuthStore } from '@/store/authStore';
 import { useLoading } from '@/contexts/LoadingContext';
+import { customToast } from '@/components/CustomToast';
 
 const Register: React.FC = () => {
   const router = useRouter();
@@ -32,32 +33,32 @@ const Register: React.FC = () => {
 
     // Validações
     if (!username.trim()) {
-      alert('Por favor, preencha o nome de usuário');
+      customToast.warning('Por favor, preencha o nome de usuário');
       return;
     }
 
     if (!email.trim()) {
-      alert('Por favor, preencha o e-mail');
+      customToast.warning('Por favor, preencha o e-mail');
       return;
     }
 
     if (!password.trim()) {
-      alert('Por favor, preencha a senha');
+      customToast.warning('Por favor, preencha a senha');
       return;
     }
 
     if (!confirmPassword.trim()) {
-      alert('Por favor, confirme sua senha');
+      customToast.warning('Por favor, confirme sua senha');
       return;
     }
 
     if (password !== confirmPassword) {
-      alert('As senhas não coincidem');
+      customToast.error('As senhas não coincidem');
       return;
     }
 
     if (!acceptTerms) {
-      alert('Você precisa aceitar os termos de uso e política de privacidade');
+      customToast.warning('Você precisa aceitar os termos de uso e política de privacidade');
       return;
     }
 
@@ -67,7 +68,6 @@ const Register: React.FC = () => {
     await new Promise(resolve => setTimeout(resolve, 1500));
     setIsLoading(false);
     removeLoading(loadingId);
-    console.log({ username, email, password, acceptTerms });
   };
 
   return (

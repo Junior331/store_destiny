@@ -29,7 +29,6 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <head>
-        {/* Preload critical assets for instant loading */}
         <link
           rel="preload"
           href="/assets/images/background_destinyShop.svg"

@@ -44,7 +44,6 @@ export default function LojaPage() {
       const loadingId = addLoading();
       await new Promise((resolve) => setTimeout(resolve, 1500));
       const teste = getAllProducts()
-      console.log(`teste ::`, teste)
       setProducts(getAllProducts());
       setIsLoading(false);
       removeLoading(loadingId);
@@ -74,7 +73,7 @@ export default function LojaPage() {
           className="mb-8 space-y-6"
         >
           {/* Tabs customizadas com scroll */}
-          <div className="relative">
+          {/* <div className="relative">
             <div className="overflow-x-auto scrollbar-hide -mx-4 px-4 md:mx-0 md:overflow-visible md:px-0">
               <div className="flex gap-2 min-w-max md:min-w-0 md:w-full md:justify-start">
                 {TABS.map((tab, index) => (
@@ -98,7 +97,7 @@ export default function LojaPage() {
                 ))}
               </div>
             </div>
-          </div>
+          </div> */}
 
           <motion.div
             initial={{ opacity: 0 }}
@@ -116,11 +115,9 @@ export default function LojaPage() {
         <div className='relative'>
           <ProductGrid products={products} loading={isLoading} />
 
-          {items.length > 0 && (
-            <ShinyButton onClick={handleCheckout}>
+            <ShinyButton onClick={handleCheckout} cartCount={items.length}>
               Finalizar pedido
             </ShinyButton>
-          )}
         </div>
       </div>
     </AuthGuard>

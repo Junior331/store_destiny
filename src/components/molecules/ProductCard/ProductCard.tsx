@@ -54,14 +54,14 @@ const RARITY_COLORS: Record<
     gradientStart: "#9663F0",
     gradientEnd: "#9B77DB",
     hoverGlow:
-      "radial-gradient(50% 40% at 50% 50%, hsla(262, 58%, 66%, 0.3) 0%, rgba(24, 61, 72, 0.00) 100%)",
+      "radial-gradient(50% 40% at 50% 50%, hsla(210, 6%, 25%, 1) 0%, rgba(24, 61, 72, 0.00) 100%)",
   },
   super_lendary: {
     border: "#27232F",
     gradientStart: "#9663F0",
     gradientEnd: "#9B77DB",
     hoverGlow:
-      "radial-gradient(50% 40% at 50% 50%, hsla(262, 58%, 66%, 0.3) 0%, rgba(24, 61, 72, 0.00) 100%)",
+      "radial-gradient(50% 40% at 50% 50%, hsla(16, 45%, 44%, 1) 0%, rgba(24, 61, 72, 0.00) 100%)",
   },
 };
 
@@ -111,7 +111,6 @@ export function ProductCard({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
-      whileHover={{ scale: 1.02 }}
       onClick={handleCardClick}
       className="relative w-full rounded-[20px] group/card transition-all duration-300 cursor-pointer"
       style={{
@@ -119,6 +118,14 @@ export function ProductCard({
         border: `2px solid ${rarityColors.border}`,
       }}
     >
+      <div
+        className={`absolute -inset-[10px] rounded-[20px] border-[2px] border-white pointer-events-none -z-10 transition-opacity duration-300 ${
+          showButton ? 'opacity-100' : 'opacity-0'
+        }`}
+        style={{
+          filter: 'drop-shadow(0 0 2px rgba(240, 242, 235, 1))',
+        }}
+      />
       <div className="absolute inset-0 rounded-2xl pointer-events-none transition-opacity duration-300 group-hover/card:opacity-0" />
 
       <div
@@ -322,17 +329,30 @@ export function ProductCard({
                 <span className="absolute inset-0 flex items-center justify-center pointer-events-none">
                   <span className="pulse-ring" />
                 </span>
-                <button
+                <motion.button
                   onClick={(e) => {
                     e.stopPropagation();
                     handleAddToCart();
                   }}
                   disabled={isAdding}
-                  className={`min-w-24 h-8 bg-transparent border border-white text-white text-sm py-3 px-4 rounded-full flex items-center justify-center gap-2 transition-all duration-300 ${
+                  initial={{ scale: 1 }}
+                  animate={!isAdding ? { scale: [1, 1.08, 1] } : { scale: 1.1 }}
+                  transition={
+                    !isAdding
+                      ? {
+                          duration: 2.5,
+                          repeat: Infinity,
+                          ease: "easeOut",
+                        }
+                      : { duration: 0.3 }
+                  }
+                  className={`min-w-24 h-8 bg-transparent border-2 border-white text-white text-sm py-3 px-4 rounded-full flex items-center justify-center gap-2 transition-colors duration-300 ${
                     isAdding
-                      ? "scale-110 bg-green-500 border-green-500 animate-pulse"
+                      ? "bg-green-500 border-green-500"
                       : "hover:bg-white/10"
                   }`}
+
+     
                 >
                   {isAdding ? (
                     <>
@@ -360,11 +380,11 @@ export function ProductCard({
                     </>
                   ) : (
                     <>
-                      <ShoppingCart className="w-3.5 h-3.5" />
+                      <ShoppingCart className="w-3.5 h-3.5 !font-bold" />
                       Adicionar
                     </>
                   )}
-                </button>
+                </motion.button>
               </div>
             )
           )}

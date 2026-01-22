@@ -128,50 +128,75 @@ const gatewayConfig: Record<PaymentGateway, {
   },
 };
 
+const gatewayLabels: Record<PaymentGateway, string> = {
+  getnet: "Cartão de crédito e débito",
+  stripe: "Cartão de crédito e carteiras digitais.",
+  paypal: "Cartão de crédito e saldo na carteira.",
+  picpay: "Cartão de crédito e saldo na carteira.",
+  pix: "Transferência instantânea.",
+  mercadopago: "Cartão de crédito, boleto, lotérica e saldo na carteira.",
+  coinbase: "Transferência em Bitcoin.",
+};
+
 const PaymentGatewayButton = React.forwardRef<HTMLButtonElement, PaymentGatewayButtonProps>(
   ({ gateway, selected = false, onClick, className }, ref) => {
     const config = gatewayConfig[gateway];
     const [isHovered, setIsHovered] = React.useState(false);
+    const [showTooltip, setShowTooltip] = React.useState(false);
 
     // Determina a cor do ícone baseado no estado
     const iconColor = (selected || isHovered) ? "#FFFFFF" : "#6D747B";
 
     return (
-      <button
-        ref={ref}
-        onClick={onClick}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        className={cn(
-          "relative flex items-center justify-center gap-2 px-4 py-3 min-w-[138px] h-[64px] md:min-w-[160px] md:h-[80px]",
-          "rounded-lg border transition-all duration-300 ease-out group",
-          "font-semibold text-sm",
-          // Default/inactive state
-          "bg-[#121314e5] border-[#6d747b33]",
-          // Hover state - show colored version
-          "hover:border-transparent",
-          gateway === "getnet" && "hover:bg-[#E91E63]",
-          gateway === "stripe" && "hover:bg-[#635BFF]",
-          gateway === "paypal" && "hover:bg-[#003087]",
-          gateway === "picpay" && "hover:bg-[#21C25E]",
-          gateway === "pix" && "hover:bg-[#32BCAD]",
-          gateway === "mercadopago" && "hover:bg-[#00B1EA]",
-          gateway === "coinbase" && "hover:bg-[#F7931A]",
-          // Selected state - always show colored version
-          selected && config.activeColor,
-          selected && "border-transparent",
-          className
+      <div className="relative">
+        <button
+          ref={ref}
+          onClick={onClick}
+          onMouseEnter={() => {
+            setIsHovered(true);
+            setShowTooltip(true);
+          }}
+          onMouseLeave={() => {
+            setIsHovered(false);
+            setShowTooltip(false);
+          }}
+          className={cn(
+            "relative flex items-center justify-center gap-2 px-4 py-3 min-w-[138px] h-[64px] md:min-w-[160px] md:h-[80px]",
+            "rounded-lg border transition-all duration-300 ease-out group",
+            "font-semibold text-sm",
+            // Default/inactive state
+            "bg-[#121314e5] border-[#6d747b33]",
+            // Hover state - show colored version
+            "hover:border-transparent",
+            gateway === "getnet" && "hover:bg-[#E91E63]",
+            gateway === "stripe" && "hover:bg-[#635BFF]",
+            gateway === "paypal" && "hover:bg-[#003087]",
+            gateway === "picpay" && "hover:bg-[#21C25E]",
+            gateway === "pix" && "hover:bg-[#32BCAD]",
+            gateway === "mercadopago" && "hover:bg-[#00B1EA]",
+            gateway === "coinbase" && "hover:bg-[#F7931A]",
+            // Selected state - always show colored version
+            selected && config.activeColor,
+            selected && "border-transparent",
+            className
+          )}
+        >
+          {gateway === "getnet" && <GetnetIcon color={iconColor} />}
+          {gateway === "stripe" && <StripeIcon color={iconColor} />}
+          {gateway === "paypal" && <PaypalIcon color={iconColor} />}
+          {gateway === "picpay" && <PicpayIcon color={iconColor} />}
+          {gateway === "pix" && <PixIcon color={iconColor} />}
+          {gateway === "mercadopago" && <MercadopagoIcon color={iconColor} />}
+          {gateway === "coinbase" && <CoinbaseIcon color={iconColor} />}
+        </button>
+
+        {showTooltip && (
+          <div className="absolute -top-12 left-1/2 -translate-x-1/2 z-50 px-3 py-2 bg-[#1A1F2E] border border-[#2D3348] rounded-lg whitespace-nowrap text-sm text-white">
+            {gatewayLabels[gateway]}
+            <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-[#1A1F2E] border-r border-b border-[#2D3348] rotate-45" />
+          </div>
         )}
-      >
-        {/* Renderiza o ícone com a cor apropriada */}
-        {gateway === "getnet" && <GetnetIcon color={iconColor} />}
-        {gateway === "stripe" && <StripeIcon color={iconColor} />}
-        {gateway === "paypal" && <PaypalIcon color={iconColor} />}
-        {gateway === "picpay" && <PicpayIcon color={iconColor} />}
-        {gateway === "pix" && <PixIcon color={iconColor} />}
-        {gateway === "mercadopago" && <MercadopagoIcon color={iconColor} />}
-        {gateway === "coinbase" && <CoinbaseIcon color={iconColor} />}
-      </button>
+      </div>
     );
   }
 );

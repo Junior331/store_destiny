@@ -40,7 +40,6 @@ const CustomToastContent = ({ message, icon, gradientColor, duration }: CustomTo
 
   return (
     <div style={{ position: 'relative', overflow: 'hidden', borderRadius: '8px' }}>
-      {/* Background com gradiente animado que diminui */}
       <div
         style={{
           position: 'absolute',
@@ -53,7 +52,6 @@ const CustomToastContent = ({ message, icon, gradientColor, duration }: CustomTo
         }}
       />
 
-      {/* Conteúdo */}
       <div
         style={{
           position: 'relative',

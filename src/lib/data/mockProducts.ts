@@ -98,7 +98,7 @@ export const MOCK_PRODUCTS: Product[] = [
     discountedPrice: 700.00, // 30% desconto
     discount: 30,
     imageUrl: 'cash_250k',
-    rarity: 'epic',
+    rarity: 'lendary',
   },
   {
     id: '10',
@@ -109,7 +109,7 @@ export const MOCK_PRODUCTS: Product[] = [
     discountedPrice: 700.00, // 30% desconto
     discount: 30,
     imageUrl: 'cash_390k',
-    rarity: 'epic',
+    rarity: 'super_lendary',
   },
 ];
 

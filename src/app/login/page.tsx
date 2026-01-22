@@ -11,18 +11,21 @@ import AuthCheckbox from '@/components/auth/AuthCheckbox';
 import { useAuthStore } from '@/store/authStore';
 import { useServerStore } from '@/store/serverStore';
 import { useLoading } from '@/contexts/LoadingContext';
+import { useAuth } from '@/lib/hooks/useAuth';
+import { saveVerificationCredentials } from '@/lib/utils/crypto';
+import { customToast } from '@/components/CustomToast';
 
 const Login: React.FC = () => {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState<string>('');
   const [showTurnstile, setShowTurnstile] = useState(false);
-  const { login, isAuthenticated } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
   const { selectedServer } = useServerStore();
   const { addLoading, removeLoading } = useLoading();
+  const { login, isLoading, error: authError } = useAuth();
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -34,41 +37,65 @@ const Login: React.FC = () => {
     e.preventDefault();
 
     if (!email || !password) {
-      alert('Preencha todos os campos');
+      customToast.warning('Preencha todos os campos');
       return;
     }
 
-    // Mostra o Turnstile
-    setShowTurnstile(true);
+    // Mostra o Turnstile apenas se ainda não foi validado
+    if (!turnstileToken) {
+      setShowTurnstile(true);
+      return;
+    }
+
+    // Se já tem token do Turnstile, prossegue com login
+    await handleLogin();
   };
 
   const handleTurnstileSuccess = async (token: string) => {
     setTurnstileToken(token);
-    setIsLoading(true);
+    // Automaticamente prossegue com o login após Turnstile validar
+    await handleLogin(token);
+  };
+
+  const handleLogin = async (token?: string) => {
+    const finalToken = token || turnstileToken;
+
+    if (!finalToken) {
+      customToast.error('Erro na verificação. Tente novamente.');
+      return;
+    }
+
     const loadingId = addLoading();
 
     try {
-      // Simula delay
-      await new Promise(resolve => setTimeout(resolve, 400));
+      const result = await login({
+        login: email,
+        password,
+        token: finalToken,
+        server: selectedServer?.name,
+      });
 
-      const success = await login(email, password);
-      if (success) {
+      if (result.success) {
+        // Login completo - redireciona para loja
+        router.push('/loja');
+      } else if (result.requires2FA || result.requiresSecurityCode) {
+        // Salva credenciais em cookies criptografados para a página de verificação
+        saveVerificationCredentials(email, password);
+
         // Redireciona para página de verificação
-        // Em produção, você verificaria se precisa de 2FA baseado na resposta do backend
-        const needs2FA = Math.random() > 0.5; // Simula necessidade de 2FA
-
-        if (needs2FA) {
-          router.push('/verification?type=2fa' as any);
-        } else {
-          router.push('/loja');
-        }
+        const verificationType = result.requires2FA ? '2fa' : 'security';
+        router.push(`/verification?type=${verificationType}` as any);
+      } else {
+        // Mostra erro e reseta Turnstile
+        customToast.error(result.error || 'Erro ao fazer login. Tente novamente.');
         setShowTurnstile(false);
+        setTurnstileToken('');
       }
     } catch (error) {
-      alert('Erro ao fazer login. Tente novamente.');
+      customToast.error(authError || 'Erro ao fazer login. Tente novamente.');
       setShowTurnstile(false);
+      setTurnstileToken('');
     } finally {
-      setIsLoading(false);
       removeLoading(loadingId);
     }
   };
@@ -118,7 +145,7 @@ const Login: React.FC = () => {
               onSuccess={handleTurnstileSuccess}
               onError={() => {
                 setShowTurnstile(false);
-                alert('Erro ao verificar. Tente novamente.');
+                customToast.error('Erro ao verificar. Tente novamente.');
               }}
               options={{
                 theme: 'dark',

@@ -1,27 +1,44 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import AuthLayout from '@/components/auth/AuthLayout';
 import AuthButton from '@/components/auth/AuthButton';
 import AuthLink from '@/components/auth/AuthLink';
 import { useLoading } from '@/contexts/LoadingContext';
+import { useAuth } from '@/lib/hooks/useAuth';
+import { useServerStore } from '@/store/serverStore';
+import { getVerificationCredentials, clearVerificationCookies } from '@/lib/utils/crypto';
+import { customToast } from '@/components/CustomToast';
 
-const VerificationPage: React.FC = () => {
+function VerificationForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const type = searchParams.get('type') || '2fa'; // '2fa' ou 'ip'
+  const type = searchParams.get('type') || '2fa'; // '2fa', 'security' ou 'ip'
   const codeLength = type === 'ip' ? 8 : 6;
 
   const [code, setCode] = useState<string[]>(Array(codeLength).fill(''));
-  const [isLoading, setIsLoading] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const { addLoading, removeLoading } = useLoading();
+  const { login, isLoading, error: authError } = useAuth();
+  const { selectedServer } = useServerStore();
 
   useEffect(() => {
     // Focus no primeiro input ao montar
     inputRefs.current[0]?.focus();
-  }, []);
+
+    // Recupera credenciais dos cookies criptografados
+    const credentials = getVerificationCredentials();
+    if (credentials) {
+      setEmail(credentials.email);
+      setPassword(credentials.password);
+    } else {
+      // Se não há credenciais, redireciona para login
+      router.push('/login');
+    }
+  }, [router]);
 
   const handleChange = (index: number, value: string) => {
     // Aceita apenas números
@@ -67,26 +84,39 @@ const VerificationPage: React.FC = () => {
 
     const fullCode = code.join('');
     if (fullCode.length !== codeLength) {
-      alert('Por favor, preencha todos os campos');
+      customToast.warning('Por favor, preencha todos os campos');
       return;
     }
 
-    setIsLoading(true);
     const loadingId = addLoading();
 
     try {
-      // Simula verificação
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Faz o login com o código de verificação
+      const result = await login({
+        login: email,
+        password,
+        two_factor_code: type === '2fa' ? fullCode : undefined,
+        security_code: type === 'security' || type === 'ip' ? fullCode : undefined,
+        server: selectedServer?.name,
+      });
 
-      // Aqui você implementaria a verificação real
-      console.log('Código verificado:', fullCode);
+      if (result.success) {
+        // Limpa cookies criptografados
+        clearVerificationCookies();
 
-      // Redireciona para loja após verificação
-      router.push('/loja');
+        // Redireciona para loja
+        router.push('/loja');
+      } else {
+        customToast.error(result.error || 'Código inválido. Tente novamente.');
+        // Limpa o código
+        setCode(Array(codeLength).fill(''));
+        inputRefs.current[0]?.focus();
+      }
     } catch (error) {
-      alert('Erro ao verificar código. Tente novamente.');
+      customToast.error(authError || 'Erro ao verificar código. Tente novamente.');
+      setCode(Array(codeLength).fill(''));
+      inputRefs.current[0]?.focus();
     } finally {
-      setIsLoading(false);
       removeLoading(loadingId);
     }
   };
@@ -96,13 +126,18 @@ const VerificationPage: React.FC = () => {
   return (
     <AuthLayout className='max-w-[535px]'>
       <h1 className="text-[22px] font-semibold text-white text-center mb-[16px] leading-tight">
-        Código de verificação
+        
+
+        {type !== 'security'
+          ? 'Verificação 2FA'
+          : 'Código de verificação'
+        }
       </h1>
 
       <p className="text-[14px] text-[#A8A8A8] text-center mb-[32px] leading-relaxed">
-        {type === 'ip'
-          ? 'É necessário um código de verificação para continuar. Digite o código de segurança enviado para o e-mail cadastrado.'
-          : 'É necessário um código de verificação para continuar. Digite o código de segurança disponível em seu App no campo abaixo.'
+        {type !== 'security'
+          ? 'Para continuar, informe o código 2FA gerado no seu aplicativo.'
+          : 'É necessário um código de verificação para continuar. Digite o código de segurança enviado para o e-mail cadastrado.'
         }
       </p>
 
@@ -143,6 +178,18 @@ const VerificationPage: React.FC = () => {
       </div>
     </AuthLayout>
   );
-};
+}
 
-export default VerificationPage;
+export default function VerificationPage() {
+  return (
+    <Suspense fallback={
+      <AuthLayout className='max-w-[535px]'>
+        <div className="flex items-center justify-center py-8">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+        </div>
+      </AuthLayout>
+    }>
+      <VerificationForm />
+    </Suspense>
+  );
+}

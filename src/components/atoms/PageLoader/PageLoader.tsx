@@ -24,12 +24,9 @@ export function PageLoader({ isLoading }: PageLoaderProps) {
             backgroundColor: '#0E121B', // Fallback color enquanto carrega
           }}
         >
-          {/* Overlay escuro para melhor contraste */}
           <div className="absolute inset-0 bg-black/40" />
 
-          {/* Conteúdo */}
           <div className="relative z-10 flex flex-col items-center gap-6">
-            {/* Logo com animação de pulse */}
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -63,7 +60,6 @@ export function PageLoader({ isLoading }: PageLoaderProps) {
               </motion.div>
             </motion.div>
 
-            {/* Texto de carregamento */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -78,7 +74,6 @@ export function PageLoader({ isLoading }: PageLoaderProps) {
               </p>
             </motion.div>
 
-            {/* Dots de loading */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}

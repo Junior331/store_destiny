@@ -10,6 +10,7 @@ import { ProductCarousel } from '@/components/molecules/ProductCarousel';
 import { useCart } from '@/lib/hooks/useCart';
 import { calculateCheckoutTotals } from '@/lib/utils/calculations';
 import { useCheckoutStore } from '@/store/checkoutStore';
+import { cn } from '@/lib/utils/cn';
 
 export interface CheckoutTemplateProps {
   serverId: string;
@@ -56,7 +57,6 @@ export function CheckoutTemplate({
       </Button>
 
       <div className="flex flex-col gap-8">
-        {/* Left Side - Order Summary */}
         <div>
           <h1 className="text-white text-3xl font-bold mb-2">
             Finalize seu pedido!
@@ -70,9 +70,7 @@ export function CheckoutTemplate({
             para entender o prazo de recebimento
           </p>
 
-          {/* Order Details */}
-          <div className="space-y-6 items-center md:space-y-0 md:grid md:grid-cols-[minmax(auto,360px)_auto_1fr] md:gap-5">
-            {/* PaymentSummary - largura fixa */}
+          <div className="space-y-6 items-center xl:space-y-0 xl:grid xl:grid-cols-[minmax(auto,360px)_auto_1fr] md:gap-5">
             <PaymentSummary
               cashValue={items.reduce((acc, item) => {
                 const price = item.product.discountedPrice || item.product.originalPrice;
@@ -91,22 +89,16 @@ export function CheckoutTemplate({
               onTotalChange={(total) => console.log('Total:', total)}
             />
 
-            {/* Divisor vertical - aparece apenas no desktop */}
             <div
-              className="w-[156px] mx-auto h-[1px] md:w-[1px] md:h-[156px]"
-              style={{
-                background: 'rgba(243, 243, 243, 0.10)',
-              }}
-            />
+              className={cn("w-[156px] mx-auto h-[1px] xl:w-[1px] xl:h-[156px] bg-[#f3f3f319]", items.length <= 1 && "mb-0")} 
+              />
 
-            {/* Cart Items Carousel */}
-            <div className="pt-12 md:pt-0 -mx-4 md:mx-0">
+            <div className={cn("xl:pt-0 mx-auto xl:mx-0", items.length > 1 && "pt-12")}>
               <ProductCarousel items={items} />
             </div>
           </div>
         </div>
 
-        {/* Right Side - Payment Form */}
         <div>
           <CheckoutForm serverId={serverId} />
         </div>
