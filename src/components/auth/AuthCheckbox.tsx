@@ -27,10 +27,9 @@ const AuthCheckbox: React.FC<AuthCheckboxProps> = ({
     if (checked && tooltip) {
       setShowTooltip(true);
 
-      // Remove o tooltip após 3 segundos
       const timer = setTimeout(() => {
         setShowTooltip(false);
-      }, 3000);
+      }, 1500);
 
       return () => clearTimeout(timer);
     } else {
