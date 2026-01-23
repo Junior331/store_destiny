@@ -17,7 +17,7 @@ const Footer = () => {
                 href="#"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-footer-link"
+                className="text-footer-link hover:text-white transition-colors duration-200 cursor-pointer"
               >
                 Destiny Roleplay
               </a>
@@ -25,7 +25,7 @@ const Footer = () => {
                 href="#"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-footer-link"
+                className="text-footer-link hover:text-white transition-colors duration-200 cursor-pointer"
               >
                 Destiny Roleplay
               </a>
@@ -122,7 +122,7 @@ const Footer = () => {
                 href="#"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-footer-link font-medium"
+                className="text-footer-link font-medium hover:text-white transition-colors duration-200 cursor-pointer"
               >
                 Termos de Serviços
               </a>
@@ -130,7 +130,7 @@ const Footer = () => {
                 href="#"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-footer-link font-medium"
+                className="text-footer-link font-medium hover:text-white transition-colors duration-200 cursor-pointer"
               >
                 Política de Privacidade
               </a>
@@ -138,7 +138,7 @@ const Footer = () => {
                 href="#"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-footer-link font-medium"
+                className="text-footer-link font-medium hover:text-white transition-colors duration-200 cursor-pointer"
               >
                 Segurança da Conta
               </a>
@@ -146,7 +146,7 @@ const Footer = () => {
                 href="#"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-footer-link font-medium"
+                className="text-footer-link font-medium hover:text-white transition-colors duration-200 cursor-pointer"
               >
                 Suporte ao Jogador
               </a>

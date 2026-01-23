@@ -58,7 +58,6 @@ export default function RootLayout({
             <Toaster
               position="top-right"
               expand={true}
-              richColors
               duration={3000}
             />
           </ProductCardProvider>

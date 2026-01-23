@@ -116,3 +116,12 @@ export const MOCK_PRODUCTS: Product[] = [
 export function getAllProducts(): Product[] {
   return MOCK_PRODUCTS;
 }
+
+/**
+ * Retorna produtos filtrados por servidor
+ * @param serverId - ID do servidor
+ * @returns Array de produtos do servidor
+ */
+export function getProductsByServer(serverId: string): Product[] {
+  return MOCK_PRODUCTS.filter(product => product.serverId === serverId);
+}

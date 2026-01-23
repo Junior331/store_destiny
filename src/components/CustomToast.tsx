@@ -7,8 +7,10 @@ const ToastDivider = () => (
   <div
     style={{
       width: '1px',
-      height: '40px',
+      height: '32px',
       background: 'rgba(255, 255, 255, 0.15)',
+      marginLeft: '12px',
+      paddingLeft: '12px',
     }}
   />
 );
@@ -16,11 +18,11 @@ const ToastDivider = () => (
 interface CustomToastProps {
   message: string;
   icon: React.ReactNode;
-  gradientColor: string;
+  blurColor: string;
   duration: number;
 }
 
-const CustomToastContent = ({ message, icon, gradientColor, duration }: CustomToastProps) => {
+const CustomToastContent = ({ message, icon, blurColor, duration }: CustomToastProps) => {
   const [progress, setProgress] = useState(100);
 
   useEffect(() => {
@@ -39,41 +41,67 @@ const CustomToastContent = ({ message, icon, gradientColor, duration }: CustomTo
   }, [duration]);
 
   return (
-    <div style={{ position: 'relative', overflow: 'hidden', borderRadius: '8px' }}>
+    <div
+      style={{
+        position: 'relative',
+        display: 'grid',
+        gridTemplateColumns: 'auto 1fr',
+        alignItems: 'center',
+        borderRadius: '8px',
+        overflow: 'hidden',
+        padding: '16px',
+        maxWidth: '300px',
+        background: 'rgba(38, 38, 38, 0.80)',
+        backdropFilter: 'blur(30px)',
+        border: '1px solid rgba(63, 63, 63, 1)',
+        cursor: 'pointer',
+        willChange: 'transform',
+      }}
+    >
+      {/* Blur effect background com animação de timer */}
       <div
         style={{
           position: 'absolute',
           top: 0,
           left: 0,
           width: `${progress}%`,
-          bottom: 0,
-          background: `linear-gradient(90deg, ${gradientColor} 0%, ${gradientColor} 60%, rgba(0, 0, 0, 0) 100%)`,
+          height: '100%',
+          background: blurColor,
+          filter: 'blur(19.25px)',
           transition: 'width 0.016s linear',
+          zIndex: -1,
+          pointerEvents: 'none',
         }}
       />
 
-      <div
-        style={{
-          position: 'relative',
-          display: 'flex',
-          padding: '16px',
-          alignItems: 'center',
-          gap: '12px',
-          borderRadius: '8px',
-          border: '1px solid #3F3F3F',
-          backdropFilter: 'blur(30px)',
-          color: '#FFF',
-          fontFamily: 'Poppins',
-          fontSize: '16px',
-          fontWeight: 500,
-          lineHeight: 'normal',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          {icon}
-          <ToastDivider />
-          <span>{message}</span>
-        </div>
+      {/* Icon */}
+      <div style={{
+        position: 'relative',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '32px',
+        height: '32px',
+        zIndex: 1,
+      }}>
+        {icon}
+      </div>
+
+      {/* Divider + Text */}
+      <div style={{
+        position: 'relative',
+        color: '#FFFFFF',
+        fontSize: '14px',
+        lineHeight: '1.5',
+        fontWeight: 400,
+        marginBottom: 0,
+        fontFamily: 'Poppins, sans-serif',
+        marginLeft: '12px',
+        paddingLeft: '12px',
+        borderLeft: '1px solid rgba(255, 255, 255, 0.15)',
+        zIndex: 1,
+      }}>
+        {message}
       </div>
     </div>
   );
@@ -85,7 +113,7 @@ export const customToast = {
       () => (
         <CustomToastContent
           message={message}
-          gradientColor="rgba(50, 171, 113, 0.15)"
+          blurColor="rgba(50, 171, 113, 0.3)"
           duration={3000}
           icon={
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
@@ -111,7 +139,7 @@ export const customToast = {
       () => (
         <CustomToastContent
           message={message}
-          gradientColor="rgba(241, 68, 68, 0.15)"
+          blurColor="rgba(209, 62, 62, 0.30)"
           duration={3000}
           icon={
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
@@ -138,7 +166,7 @@ export const customToast = {
       () => (
         <CustomToastContent
           message={message}
-          gradientColor="rgba(241, 182, 68, 0.15)"
+          blurColor="rgba(210, 153, 38, 0.30)"
           duration={3000}
           icon={
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
@@ -165,7 +193,7 @@ export const customToast = {
       () => (
         <CustomToastContent
           message={message}
-          gradientColor="rgba(217, 217, 217, 0.15)"
+          blurColor="rgba(171, 171, 171, 0.30)"
           duration={3000}
           icon={
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
