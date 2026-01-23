@@ -82,6 +82,8 @@ const Register: React.FC = () => {
           placeholder="Crie seu nome de usuário"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          minLength={5}
+          maxLength={45}
           required
         />
 
@@ -99,6 +101,8 @@ const Register: React.FC = () => {
           placeholder="Crie uma senha"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          minLength={5}
+          maxLength={64}
           required
         />
 
@@ -107,6 +111,8 @@ const Register: React.FC = () => {
           placeholder="Confirme sua senha"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
+          minLength={5}
+          maxLength={64}
           required
         />
 

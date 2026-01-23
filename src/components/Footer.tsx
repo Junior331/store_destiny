@@ -15,13 +15,17 @@ const Footer = () => {
             <div className="flex gap-6">
               <a
                 href="#"
-                className="text-footer-link hover:text-footer-link-hover transition-colors duration-200"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-footer-link"
               >
                 Destiny Roleplay
               </a>
               <a
                 href="#"
-                className="text-footer-link hover:text-footer-link-hover transition-colors duration-200"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-footer-link"
               >
                 Destiny Roleplay
               </a>
@@ -32,7 +36,9 @@ const Footer = () => {
             <div className="flex gap-4">
               <a
                 href="#"
-                className="text-footer-link hover:text-footer-link-hover transition-colors duration-200"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-footer-link"
                 aria-label="YouTube"
               >
                 <svg
@@ -50,7 +56,9 @@ const Footer = () => {
               </a>
               <a
                 href="#"
-                className="text-footer-link hover:text-footer-link-hover transition-colors duration-200"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-footer-link"
                 aria-label="Instagram"
               >
                 <svg
@@ -72,7 +80,9 @@ const Footer = () => {
               </a>
               <a
                 href="#"
-                className="text-footer-link hover:text-footer-link-hover transition-colors duration-200"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-footer-link"
                 aria-label="LinkedIn"
               >
                 <svg
@@ -110,25 +120,33 @@ const Footer = () => {
             <div className="flex flex-wrap gap-6">
               <a
                 href="#"
-                className="text-footer-link hover:text-footer-link-hover transition-colors duration-200 font-medium"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-footer-link font-medium"
               >
                 Termos de Serviços
               </a>
               <a
                 href="#"
-                className="text-footer-link hover:text-footer-link-hover transition-colors duration-200 font-medium"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-footer-link font-medium"
               >
                 Política de Privacidade
               </a>
               <a
                 href="#"
-                className="text-footer-link hover:text-footer-link-hover transition-colors duration-200 font-medium"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-footer-link font-medium"
               >
                 Segurança da Conta
               </a>
               <a
                 href="#"
-                className="text-footer-link hover:text-footer-link-hover transition-colors duration-200 font-medium"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-footer-link font-medium"
               >
                 Suporte ao Jogador
               </a>

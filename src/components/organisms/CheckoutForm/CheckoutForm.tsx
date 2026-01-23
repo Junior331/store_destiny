@@ -41,6 +41,11 @@ export function CheckoutForm({ serverId }: CheckoutFormProps) {
   };
 
   const handleSubmit = async () => {
+    if (items.length === 0) {
+      customToast.warning('Adicione um produto ao carrinho para continuar.');
+      return;
+    }
+
     if (!selectedPayment) {
       customToast.error('Selecione um método de pagamento');
       return;

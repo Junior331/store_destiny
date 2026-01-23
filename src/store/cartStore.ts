@@ -15,24 +15,16 @@ export const useCartStore = create<CartStore>((set, get) => ({
   items: [],
 
   addItem: (product) => {
+    const { customToast } = require('@/components/CustomToast');
+
     set((state) => {
       const existingItem = state.items.find(
         (item) => item.product.id === product.id
       );
 
       if (existingItem) {
-        // Limite máximo de 15 unidades
-        if (existingItem.quantity >= 15) {
-          return state;
-        }
-
-        return {
-          items: state.items.map((item) =>
-            item.product.id === product.id
-              ? { ...item, quantity: item.quantity + 1 }
-              : item
-          ),
-        };
+        customToast.warning('Esse produto já está no seu carrinho.');
+        return state;
       }
 
       return {

@@ -12,6 +12,7 @@ import { ProductGrid } from '@/components/organisms/ProductGrid';
 import { useCart } from '@/lib/hooks/useCart';
 import { AuthGuard } from '@/components/auth/AuthGuard';
 import { useLoading } from '@/contexts/LoadingContext';
+import { customToast } from '@/components/CustomToast';
 
 const TABS = [
   { id: 'cash', label: 'Cash' },
@@ -54,9 +55,11 @@ export default function LojaPage() {
   }, []);
 
   const handleCheckout = () => {
-    if (items.length > 0) {
-      router.push('/checkout');
+    if (items.length === 0) {
+      customToast.warning('Adicione um produto ao carrinho para continuar.');
+      return;
     }
+    router.push('/checkout');
   };
 
   if (!isAuthenticated) {

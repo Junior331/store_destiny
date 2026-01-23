@@ -1,10 +1,11 @@
 "use client";
 
 import { X } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import QRCode from "qrcode";
 import { gerarQRCodePix } from "@/lib/services/bradesco-pix";
+import { formatCurrency } from "@/lib/utils/formatters";
 
 interface QRPaymentModalProps {
   isOpen: boolean;
@@ -27,10 +28,13 @@ export function QRPaymentModal({
   const [qrCodeUrl, setQrCodeUrl] = useState("");
   const [pixPayload, setPixPayload] = useState("");
   const [loading, setLoading] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(600); // 10 minutos em segundos
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (isOpen && pixKey) {
       setLoading(true);
+      setTimeLeft(600); // Resetar timer para 10 minutos
 
       // Usa a API do Bradesco para gerar QR Code PIX
       gerarQRCodePix({
@@ -81,6 +85,26 @@ export function QRPaymentModal({
     }
   }, [isOpen, pixKey, amount, merchantName, merchantCity]);
 
+  // Timer countdown
+  useEffect(() => {
+    if (isOpen) {
+      timerRef.current = setInterval(() => {
+        setTimeLeft((prev) => {
+          if (prev <= 1) {
+            if (timerRef.current) clearInterval(timerRef.current);
+            onClose(); // Fechar modal quando o tempo acabar
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return () => {
+        if (timerRef.current) clearInterval(timerRef.current);
+      };
+    }
+  }, [isOpen, onClose]);
+
   const handleCopyCode = async () => {
     await navigator.clipboard.writeText(pixPayload);
     setCopied(true);
@@ -111,7 +135,7 @@ export function QRPaymentModal({
               duration: 0.4,
             }}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-3xl rounded-2xl border border-zinc-800 bg-[#1a1a1a] p-4 md:p-6 lg:p-8 shadow-2xl my-auto"
+            className="relative w-full max-w-[790px] rounded-2xl border border-zinc-800 bg-[#1a1a1a] p-4 md:p-6 lg:p-8 shadow-2xl my-auto"
           >
         <button
           onClick={onClose}
@@ -121,9 +145,11 @@ export function QRPaymentModal({
         </button>
 
         <div className="mb-6 md:mb-8">
-          <h2 className="mb-4 md:mb-6 text-xl md:text-2xl lg:text-3xl font-bold leading-tight text-white text-center md:text-left">
+          <h2 className="mb-4 md:mb-6 text-xl md:text-2xl lg:text-3xl font-bold leading-tight text-white text-center md:text-left max-w-[96%] text-wrap">
             Escaneie o Código QR para pagar{" "}
-            <span className="text-blue-500 block md:inline">R$ {amount.toFixed(2)}</span>
+            <span className="text-blue-500 block md:inline">
+              {formatCurrency(amount)}
+            </span>
           </h2>
 
           <div className="flex flex-col lg:flex-row gap-6 md:gap-8">
@@ -145,7 +171,7 @@ export function QRPaymentModal({
 
               <div className="mb-4 py-4 bg-zinc-900/50 rounded-lg">
                 <p className="text-white text-sm md:text-base">
-                  Você tem <span className="text-blue-500 font-semibold">trinta minutos</span> para efetuar o pagamento.
+                  Você tem <span className="text-blue-500 font-semibold">{Math.floor(timeLeft / 60).toString().padStart(2, '0')} minutos</span> para efetuar o pagamento.
                 </p>
               </div>
 
@@ -170,9 +196,6 @@ export function QRPaymentModal({
                   <div className="h-40 w-40 md:h-48 md:w-48 animate-pulse bg-gray-200" />
                 )}
               </div>
-              <p className="mt-3 text-xs md:text-sm text-zinc-400 text-center">
-                {loading ? "Gerando QR Code..." : "Use a câmera do seu celular para escanear"}
-              </p>
             </div>
           </div>
         </div>
@@ -188,24 +211,24 @@ export function QRPaymentModal({
             Escolha pagar via PIX pelo seu Internet Banking ou App de Pagamentos. Depois cole o seguinte código:
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-3">
+          <div className="flex flex-col sm:flex-row">
             <div className="relative flex-1">
               <input
                 type="text"
                 value={pixPayload}
                 readOnly
-                className="w-full rounded-lg border border-zinc-700 bg-zinc-900/50 px-3 md:px-4 py-2 md:py-3 text-xs md:text-sm text-zinc-300 focus:outline-none focus:ring-2 focus:ring-blue-500 truncate"
+                className="w-full rounded-bl-lg rounded-tl-lg border border-zinc-700 bg-zinc-900/50 px-3 md:px-4 py-2 md:py-3 text-xs md:text-sm text-zinc-300 focus:outline-none focus:ring-2 focus:ring-blue-500 truncate"
               />
             </div>
             <button
               onClick={handleCopyCode}
-              className="rounded-lg bg-blue-600 px-4 md:px-6 py-2 md:py-3 text-sm font-medium text-white transition-colors hover:bg-blue-700 whitespace-nowrap flex-shrink-0"
+              className="rounded-br-lg rounded-tr-lg bg-blue-500 px-4 md:px-6 py-2 md:py-3 text-sm font-medium text-white transition-colors hover:bg-blue-600 whitespace-nowrap flex-shrink-0"
             >
               {copied ? "✓ Copiado!" : "Copiar Código"}
             </button>
           </div>
 
-          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-2 text-xs md:text-sm">
+          {/* <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-2 text-xs md:text-sm">
             <div className="p-3 rounded-lg bg-zinc-900/30">
               <p className="text-zinc-500">Chave PIX:</p>
               <p className="text-zinc-300 truncate font-mono">{pixKey}</p>
@@ -214,7 +237,7 @@ export function QRPaymentModal({
               <p className="text-zinc-500">Valor:</p>
               <p className="text-zinc-300 font-semibold">R$ {amount.toFixed(2)}</p>
             </div>
-          </div>
+          </div> */}
 
           <div className="mt-4 md:hidden p-3 bg-blue-900/20 border border-blue-800/30 rounded-lg">
             <p className="text-xs text-blue-300 flex items-center gap-2">
@@ -224,14 +247,14 @@ export function QRPaymentModal({
           </div>
         </div>
 
-        <div className="mt-6 pt-4 border-t border-zinc-800">
+        {/* <div className="mt-6 pt-4 border-t border-zinc-800">
           <p className="text-xs text-zinc-500 text-center">
             Precisa de ajuda?{" "}
             <button className="text-blue-400 hover:text-blue-300 transition-colors">
               Clique aqui para suporte
             </button>
           </p>
-        </div>
+        </div> */}
           </motion.div>
         </motion.div>
       )}

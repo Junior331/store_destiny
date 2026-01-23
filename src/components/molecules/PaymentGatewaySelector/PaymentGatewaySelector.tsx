@@ -50,7 +50,7 @@ const PaymentGatewaySelector: React.FC<PaymentGatewaySelectorProps> = ({
 
         return isSelected ? (
           <div
-            className="shiny-button relative flex flex-col items-center justify-center overflow-hidden transition-all duration-300 bg-[#2A6C80] p-2 rounded-xl gap-2.5"
+            className="shiny-button relative flex flex-col items-center justify-center transition-all duration-300 bg-[#2A6C80] p-2 rounded-xl gap-2.5"
             key={gateway}
           >
             <PaymentGatewayButton

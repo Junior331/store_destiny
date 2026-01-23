@@ -64,9 +64,9 @@ export function CheckoutTemplate({
           <p className="text-gray-400 text-sm mb-6">
             Seu pedido será entregue após a confirmação do pagamento.
             <br />
-            <button className="text-[#377DFF] italic hover:underline">
+            <a href="#" target="_blank" rel="noopener noreferrer" className="text-[#377DFF] italic hover:underline">
               Clique aqui
-            </button>{' '}
+            </a>{' '}
             para entender o prazo de recebimento
           </p>
 

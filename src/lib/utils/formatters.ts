@@ -21,3 +21,11 @@ export function formatPercent(value: number): string {
 export function formatCash(value: number): string {
   return new Intl.NumberFormat('pt-BR').format(value);
 }
+
+/**
+ * Formata um text normal em um texto com a primeira letra maiúscula
+ */
+export const capitalizeFirstLetter = (text: string) => {
+  if (!text) return '';
+  return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+};

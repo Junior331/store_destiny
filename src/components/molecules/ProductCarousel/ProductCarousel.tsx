@@ -82,7 +82,7 @@ export function ProductCarousel({ items }: ProductCarouselProps) {
       <div
         ref={scrollContainerRef}
         onScroll={checkScrollPosition}
-        className='overflow-x-auto scrollbar-hide flex gap-4 py-8'
+        className='overflow-x-auto scrollbar-hide flex gap-4 py-8 px-2'
         style={{
           scrollbarWidth: 'none',
           msOverflowStyle: 'none',

@@ -53,6 +53,7 @@ const Login: React.FC = () => {
 
   const handleTurnstileSuccess = async (token: string) => {
     setTurnstileToken(token);
+    setShowTurnstile(false); // Remove o Turnstile após sucesso
     // Automaticamente prossegue com o login após Turnstile validar
     await handleLogin(token);
   };
@@ -116,6 +117,8 @@ const Login: React.FC = () => {
           placeholder="Usuário ou e-mail"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          minLength={5}
+          maxLength={45}
           required
         />
 
@@ -124,6 +127,8 @@ const Login: React.FC = () => {
           placeholder="Senha"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          minLength={5}
+          maxLength={64}
           required
         />
 
@@ -139,7 +144,7 @@ const Login: React.FC = () => {
         </div>
 
         {showTurnstile && (
-          <div className="flex justify-center py-4">
+          <div className="flex justify-center">
             <Turnstile
               siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000AA'}
               onSuccess={handleTurnstileSuccess}
@@ -154,7 +159,7 @@ const Login: React.FC = () => {
           </div>
         )}
 
-        <div className="pt-[8px]">
+        <div className={showTurnstile ? "" : "pt-[8px]"}>
           <AuthButton type="submit" isLoading={isLoading}>
             Entrar na minha conta
           </AuthButton>

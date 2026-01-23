@@ -1,11 +1,12 @@
 'use client';
 
+import { LogOut } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { LogOut, Server, ChevronDown } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { useServerStore } from '@/store/serverStore';
 import { Button } from '@/components/atoms/Button';
 import { AuthLogo } from './auth';
+import { capitalizeFirstLetter } from '@/lib/utils/formatters';
 
 export function Header() {
   const router = useRouter();
@@ -40,7 +41,7 @@ export function Header() {
           <div className="flex items-center gap-4">
             {user && (
               <span className="flex flex-col text-center text-sm text-[#777]">
-                Olá, bem vindo <span className="text-white font-medium">{user.username}</span>
+                <span className="text-white font-medium">{capitalizeFirstLetter(user.username)}</span>
               </span>
             )}
             <Button

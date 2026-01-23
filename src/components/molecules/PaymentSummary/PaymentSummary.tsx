@@ -65,21 +65,21 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({
       <div className="space-y-3">
         <div className="flex justify-between items-center">
           <span className="text-[#6D747B] text-base">Cash</span>
-          <span className="text-[#C5C8CC] text-base font-medium">
+          <span className="text-[#C5C8CC] text-base font-medium break-words text-right">
             {cashValue.toLocaleString('pt-BR')}
           </span>
         </div>
 
         <div className="flex justify-between items-center">
           <span className="text-[#6D747B] text-base">Taxa de pagamento</span>
-          <span className="text-[#C5C8CC] text-base">
+          <span className="text-[#C5C8CC] text-base break-words text-right">
             {formatCurrency(paymentFee)}
           </span>
         </div>
 
         <div className="flex justify-between items-center">
           <span className="text-[#6D747B] text-base">Desconto</span>
-          <span className='text-base text-[#C5C8CC]'>
+          <span className='text-base text-[#C5C8CC] break-words text-right'>
             {discount > 0 ? `- ${formatCurrency(discount)}` : '-'}
           </span>
         </div>
@@ -88,7 +88,7 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({
 
         <div className="flex justify-between items-center">
           <span className="text-[#91989E] text-base font-medium">Valor total</span>
-          <span className="text-[#F3F3F3] text-lg font-bold">
+          <span className="text-[#F3F3F3] text-lg font-bold break-words text-right">
             {formatCurrency(total)}
           </span>
         </div>

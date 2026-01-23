@@ -119,7 +119,7 @@ export function ProductCard({
       }}
     >
       <div
-        className={`absolute -inset-[10px] rounded-[20px] border-[2px] border-white pointer-events-none -z-10 transition-opacity duration-300 ${
+        className={`absolute -inset-[10px] rounded-[20px] border-[2px] border-white pointer-events-none transition-opacity duration-300 ${
           showButton ? 'opacity-100' : 'opacity-0'
         }`}
         style={{
