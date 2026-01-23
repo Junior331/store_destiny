@@ -15,7 +15,7 @@ export const MOCK_SERVERS: Server[] = [
   },
   {
     id: 'server-2',
-    name: 'GRAND THEFT AUTO BATTLEGROUNDS',
+    name: 'BATTLEGROUNDS',
     slug: 'battlegrounds',
     description: 'Servidor de sobrevivência extrema',
     image: getImage('gtabattlegrounds_logo').src,
