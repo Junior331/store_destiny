@@ -3,6 +3,7 @@ import { create } from 'zustand';
 export interface Server {
   id: string;
   name: string;
+  slug: string;
   description?: string;
   image?: string;
 }
@@ -21,16 +22,19 @@ const mockServers: Server[] = [
   {
     id: 'server-1',
     name: 'Destiny Server',
+    slug: 'destiny',
     description: 'Servidor principal de Destiny',
   },
   {
     id: 'server-2',
     name: 'Survival Server',
+    slug: 'survival',
     description: 'Servidor de sobrevivência',
   },
   {
     id: 'server-3',
     name: 'Creative Server',
+    slug: 'creative',
     description: 'Servidor criativo',
   },
 ];

@@ -15,11 +15,13 @@ import { cn } from '@/lib/utils/cn';
 export interface CheckoutTemplateProps {
   serverId: string;
   serverName: string;
+  serverSlug?: string;
 }
 
 export function CheckoutTemplate({
   serverId,
   serverName,
+  serverSlug,
 }: CheckoutTemplateProps) {
   const router = useRouter();
   const { items } = useCart();
