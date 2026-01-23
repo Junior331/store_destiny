@@ -104,8 +104,18 @@ function VerificationForm() {
         // Limpa cookies criptografados
         clearVerificationCookies();
 
-        // Redireciona para loja
-        router.push('/loja');
+        // Verifica se há URL de redirecionamento salva
+        const redirectUrl = typeof window !== 'undefined'
+          ? localStorage.getItem('redirectAfterLogin')
+          : null;
+
+        if (redirectUrl) {
+          localStorage.removeItem('redirectAfterLogin');
+          router.push(redirectUrl as any);
+        } else {
+          const serverSlug = selectedServer?.slug || 'destiny';
+          router.push(`/${serverSlug}/view` as any);
+        }
       } else {
         customToast.error(result.error || 'Código inválido. Tente novamente.');
         // Limpa o código

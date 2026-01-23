@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { MOCK_SERVERS } from '@/lib/data/mockServers';
 
 export interface Server {
   id: string;
@@ -17,33 +18,11 @@ interface ServerStore {
   init: () => void;
 }
 
-// Servidores mockados - substituir por chamada à API
-const mockServers: Server[] = [
-  {
-    id: 'server-1',
-    name: 'Destiny Server',
-    slug: 'destiny',
-    description: 'Servidor principal de Destiny',
-  },
-  {
-    id: 'server-2',
-    name: 'Survival Server',
-    slug: 'survival',
-    description: 'Servidor de sobrevivência',
-  },
-  {
-    id: 'server-3',
-    name: 'Creative Server',
-    slug: 'creative',
-    description: 'Servidor criativo',
-  },
-];
-
 const STORAGE_KEY = 'server-storage';
 
 export const useServerStore = create<ServerStore>((set, get) => ({
   selectedServer: null,
-  servers: mockServers,
+  servers: MOCK_SERVERS,
 
   init: () => {
     if (typeof window !== 'undefined') {
@@ -51,7 +30,7 @@ export const useServerStore = create<ServerStore>((set, get) => ({
       if (stored) {
         try {
           const data = JSON.parse(stored);
-          set({ selectedServer: data.selectedServer, servers: data.servers || mockServers });
+          set({ selectedServer: data.selectedServer, servers: data.servers || MOCK_SERVERS });
         } catch (e) {
           // Ignore parse errors
         }

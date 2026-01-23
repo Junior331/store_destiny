@@ -14,6 +14,7 @@ import { useLoading } from '@/contexts/LoadingContext';
 import { useAuth } from '@/lib/hooks/useAuth';
 import { saveVerificationCredentials } from '@/lib/utils/crypto';
 import { customToast } from '@/components/CustomToast';
+import { getServerViewUrl } from '@/lib/utils/navigation';
 
 const Login: React.FC = () => {
   const router = useRouter();
@@ -29,9 +30,19 @@ const Login: React.FC = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      router.push('/loja');
+      // Verifica se há URL de redirecionamento salva
+      const redirectUrl = typeof window !== 'undefined'
+        ? localStorage.getItem('redirectAfterLogin')
+        : null;
+
+      if (redirectUrl) {
+        localStorage.removeItem('redirectAfterLogin');
+        router.push(redirectUrl as any);
+      } else {
+        router.push(getServerViewUrl(selectedServer));
+      }
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, router, selectedServer]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,8 +88,17 @@ const Login: React.FC = () => {
       });
 
       if (result.success) {
-        // Login completo - redireciona para loja
-        router.push('/loja');
+        // Verifica se há URL de redirecionamento salva
+        const redirectUrl = typeof window !== 'undefined'
+          ? localStorage.getItem('redirectAfterLogin')
+          : null;
+
+        if (redirectUrl) {
+          localStorage.removeItem('redirectAfterLogin');
+          router.push(redirectUrl as any);
+        } else {
+          router.push(getServerViewUrl(selectedServer));
+        }
       } else if (result.requires2FA || result.requiresSecurityCode) {
         // Salva credenciais em cookies criptografados para a página de verificação
         saveVerificationCredentials(email, password);

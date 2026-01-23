@@ -10,7 +10,6 @@ import { Typography } from '@/components/atoms/Typography';
 import { ShinyButton } from '@/components/atoms/ShinyButton';
 import { ProductGrid } from '@/components/organisms/ProductGrid';
 import { useCart } from '@/lib/hooks/useCart';
-import { AuthGuard } from '@/components/auth/AuthGuard';
 import { useLoading } from '@/contexts/LoadingContext';
 import { customToast } from '@/components/CustomToast';
 
@@ -25,13 +24,6 @@ export default function ServerViewPage() {
   const { isAuthenticated } = useAuthStore();
   const { selectedServer, setSelectedServer, servers } = useServerStore();
   const { addLoading, removeLoading } = useLoading();
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.push('/login');
-      return;
-    }
-  }, [isAuthenticated, router]);
 
   useEffect(() => {
     // Carrega produtos do servidor específico
@@ -72,16 +64,21 @@ export default function ServerViewPage() {
       customToast.warning('Adicione um produto ao carrinho para continuar.');
       return;
     }
+
+    // Se não estiver autenticado, salva URL de destino e redireciona para login
+    if (!isAuthenticated) {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('redirectAfterLogin', `/${serverSlug}/checkout`);
+      }
+      router.push('/login');
+      return;
+    }
+
     router.push(`/${serverSlug}/checkout`);
   };
 
-  if (!isAuthenticated) {
-    return null;
-  }
-
   return (
-    <AuthGuard>
-      <div className="max-w-6xl mx-auto px-4 py-8">
+    <div className="max-w-6xl mx-auto px-4 py-8">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -114,6 +111,5 @@ export default function ServerViewPage() {
           </ShinyButton>
         </div>
       </div>
-    </AuthGuard>
   );
 }
