@@ -91,9 +91,9 @@ export const MOCK_PRODUCTS: Product[] = [
     rarity: 'super_lendary',
   },
 
-  // ===== SURVIVAL SERVER (server-2) =====
+  // ===== BATTLEGROUNDS SERVER (server-2) =====
   {
-    id: 'survival-1',
+    id: 'battlegrounds-1',
     serverId: 'server-2',
     name: '8.000 CASH',
     cashAmount: 8000,
@@ -104,7 +104,7 @@ export const MOCK_PRODUCTS: Product[] = [
     rarity: 'common',
   },
   {
-    id: 'survival-2',
+    id: 'battlegrounds-2',
     serverId: 'server-2',
     name: '15.000 CASH',
     cashAmount: 15000,
@@ -115,7 +115,7 @@ export const MOCK_PRODUCTS: Product[] = [
     rarity: 'common',
   },
   {
-    id: 'survival-3',
+    id: 'battlegrounds-3',
     serverId: 'server-2',
     name: '25.000 CASH',
     cashAmount: 25000,
@@ -126,7 +126,7 @@ export const MOCK_PRODUCTS: Product[] = [
     rarity: 'common',
   },
   {
-    id: 'survival-4',
+    id: 'battlegrounds-4',
     serverId: 'server-2',
     name: '50.000 CASH',
     cashAmount: 50000,
@@ -137,7 +137,7 @@ export const MOCK_PRODUCTS: Product[] = [
     rarity: 'rare',
   },
   {
-    id: 'survival-5',
+    id: 'battlegrounds-5',
     serverId: 'server-2',
     name: '90.000 CASH',
     cashAmount: 90000,
@@ -148,7 +148,7 @@ export const MOCK_PRODUCTS: Product[] = [
     rarity: 'rare',
   },
   {
-    id: 'survival-6',
+    id: 'battlegrounds-6',
     serverId: 'server-2',
     name: '180.000 CASH',
     cashAmount: 180000,
@@ -159,7 +159,7 @@ export const MOCK_PRODUCTS: Product[] = [
     rarity: 'epic',
   },
   {
-    id: 'survival-7',
+    id: 'battlegrounds-7',
     serverId: 'server-2',
     name: '300.000 CASH',
     cashAmount: 300000,
@@ -170,7 +170,7 @@ export const MOCK_PRODUCTS: Product[] = [
     rarity: 'lendary',
   },
   {
-    id: 'survival-8',
+    id: 'battlegrounds-8',
     serverId: 'server-2',
     name: '500.000 CASH',
     cashAmount: 500000,

@@ -15,10 +15,10 @@ export const MOCK_SERVERS: Server[] = [
   },
   {
     id: 'server-2',
-    name: 'Survival Server',
-    slug: 'survival',
+    name: 'GRAND THEFT AUTO BATTLEGROUNDS',
+    slug: 'battlegrounds',
     description: 'Servidor de sobrevivência extrema',
-    image: getImage('logo_destiny_originals').src,
+    image: getImage('gtabattlegrounds_logo').src,
   },
   {
     id: 'server-3',

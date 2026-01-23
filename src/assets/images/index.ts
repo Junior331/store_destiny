@@ -11,6 +11,7 @@ import cash_390k from "./cash_390.webp";
 import cash_550k from "./cash_550.webp";
 import login_bg from "./login_bg.webp";
 import fallback from "./placeholder.svg";
+import gtabattlegrounds_logo from "./gtabattlegrounds_logo.png";
 import logo_destiny_originals from "./logo_destiny_originals.svg";
 import background_destinyShop from "./background_destinyShop.png";
 
@@ -36,6 +37,7 @@ export const images: Record<string, ImageObject> = {
   
   login_bg,
   fallback,
+  gtabattlegrounds_logo,
   background_destinyShop,
   logo_destiny_originals,
 };

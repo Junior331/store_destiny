@@ -16,7 +16,7 @@ const Footer = () => {
             </h2>
             <div className="flex gap-6">
               <a
-                href="#"
+                href="https://originals.rpdestiny.com/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[#7d7d7d] font-medium hover:text-white transition-colors duration-200 cursor-pointer"
@@ -26,7 +26,7 @@ const Footer = () => {
 
               </a>
               <a
-                href="#"
+                href="https://gtabattlegrounds.com/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[#7d7d7d] font-medium hover:text-white transition-colors duration-200 cursor-pointer"
