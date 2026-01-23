@@ -87,7 +87,7 @@ const MotionGridContainer = ({
 
 const MotionGridItem = ({ children, index }: { children: React.ReactNode; index: number }) => (
   <motion.div
-    className="max-[385px]:max-w-[180px] max-[385px]:w-full"
+    className="max-[386px]:max-w-[180px] max-[386px]:w-full"
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{
