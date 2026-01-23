@@ -70,7 +70,7 @@ const MotionGridContainer = ({
     }
 
     // itemsPerRow === 5 ou mais
-    return 'grid grid-cols-1 min-[386px]:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-8 max-[385px]:place-items-center';
+    return 'grid grid-cols-1 min-[386px]:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 md:gap-8 max-[385px]:place-items-center';
   };
 
   return (

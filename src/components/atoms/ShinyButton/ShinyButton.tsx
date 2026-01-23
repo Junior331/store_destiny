@@ -12,7 +12,7 @@ interface ShinyButtonProps
 const ShinyButton = React.forwardRef<HTMLButtonElement, ShinyButtonProps>(
   ({ className, children, cartCount = 0, ...props }, ref) => {
     return (
-      <div className="sticky mt-6 -mb-1 bottom-0 left-1/2 -translate-x-1/2 flex justify-center z-50 py-2 max-w-64">
+      <div className="sticky mt-6 -mb-1 bottom-0 left-0 right-0 flex justify-center z-50 py-2 w-full">
         <span className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <span className="pulse-ring" />
         </span>
