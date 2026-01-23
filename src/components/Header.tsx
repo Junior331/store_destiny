@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
 import { useServerStore } from '@/store/serverStore';
 import { Button } from '@/components/atoms/Button';
-import { AuthLogo } from './auth';
+import { AuthLogo, AuthLogoServer } from './auth';
 import { capitalizeFirstLetter } from '@/lib/utils/formatters';
 
 export function Header() {
@@ -35,7 +35,11 @@ export function Header() {
       <div className="px-4 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <AuthLogo className="w-[50px] h-[30px] text-white" />
+            <AuthLogo className="w-[50px] h-full text-white" />
+            <div
+              className="w-[1px] h-[36px] bg-[#f3f3f319]"
+              />
+            <AuthLogoServer />
           </div>
 
           <div className="flex items-center gap-4">

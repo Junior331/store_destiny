@@ -8,7 +8,7 @@ const Footer = () => {
 
   return (
     <footer className="bg-[#0f0f0f] p-[68px_0px_65px]">
-      <div className="p-[4.5px_15px_0.5px_15px]">
+      <div className="p-[4.5px_15px_0.5px_15px] max-w-6xl mx-auto">
         <div className="flex flex-col lg:flex-row justify-between items-start gap-8">
           <div className="space-y-4">
             <h2 className=" text-xl font-bold">

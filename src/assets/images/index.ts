@@ -11,8 +11,7 @@ import cash_390k from "./cash_390.webp";
 import cash_550k from "./cash_550.webp";
 import login_bg from "./login_bg.webp";
 import fallback from "./placeholder.svg";
-
-
+import logo_destiny_originals from "./logo_destiny_originals.svg";
 import background_destinyShop from "./background_destinyShop.png";
 
 type ImageObject = {
@@ -38,6 +37,7 @@ export const images: Record<string, ImageObject> = {
   login_bg,
   fallback,
   background_destinyShop,
+  logo_destiny_originals,
 };
 
 type IImage = keyof typeof images;

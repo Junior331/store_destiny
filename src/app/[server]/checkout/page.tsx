@@ -20,7 +20,6 @@ export default function ServerCheckoutPage() {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      console.log('❌ Não autenticado - redirecionando para login');
       router.push('/login');
       return;
     }
@@ -29,7 +28,6 @@ export default function ServerCheckoutPage() {
     const server = servers.find(s => s.slug === serverSlug);
 
     if (!server) {
-      console.error('❌ Servidor não encontrado para slug:', serverSlug);
       customToast.error('Servidor não encontrado');
       router.push('/destiny/view');
       return;

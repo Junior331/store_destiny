@@ -1,3 +1,4 @@
+import { getImage } from '@/assets/images';
 import { Server } from '@/store/serverStore';
 
 /**
@@ -10,21 +11,21 @@ export const MOCK_SERVERS: Server[] = [
     name: 'Destiny Roleplay',
     slug: 'destiny',
     description: 'Servidor principal de Roleplay',
-    image: '/assets/servers/destiny.png',
+    image: getImage('logo_destiny_originals').src,
   },
   {
     id: 'server-2',
     name: 'Survival Server',
     slug: 'survival',
     description: 'Servidor de sobrevivência extrema',
-    image: '/assets/servers/survival.png',
+    image: getImage('logo_destiny_originals').src,
   },
   {
     id: 'server-3',
     name: 'Creative Build',
     slug: 'creative',
     description: 'Servidor criativo para construções',
-    image: '/assets/servers/creative.png',
+    image: getImage('logo_destiny_originals').src,
   },
 ];
 
