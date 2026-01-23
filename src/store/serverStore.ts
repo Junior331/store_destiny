@@ -30,9 +30,11 @@ export const useServerStore = create<ServerStore>((set, get) => ({
       if (stored) {
         try {
           const data = JSON.parse(stored);
-          set({ selectedServer: data.selectedServer, servers: data.servers || MOCK_SERVERS });
+          // SEMPRE usa MOCK_SERVERS para garantir dados atualizados
+          set({ selectedServer: data.selectedServer, servers: MOCK_SERVERS });
         } catch (e) {
           // Ignore parse errors
+          set({ servers: MOCK_SERVERS });
         }
       }
     }
@@ -41,32 +43,23 @@ export const useServerStore = create<ServerStore>((set, get) => ({
   setSelectedServer: (server: Server | null) => {
     set({ selectedServer: server });
     if (typeof window !== 'undefined') {
-      const current = get();
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
         selectedServer: server,
-        servers: current.servers,
+        // Não salva servers no localStorage, sempre usa MOCK_SERVERS
       }));
     }
   },
 
   setServers: (servers: Server[]) => {
-    set({ servers });
-    if (typeof window !== 'undefined') {
-      const current = get();
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        selectedServer: current.selectedServer,
-        servers,
-      }));
-    }
+    // Não permite modificar servers, sempre usa MOCK_SERVERS
+    console.warn('setServers foi chamado mas será ignorado. Use MOCK_SERVERS diretamente.');
   },
 
   clearSelectedServer: () => {
     set({ selectedServer: null });
     if (typeof window !== 'undefined') {
-      const current = get();
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
         selectedServer: null,
-        servers: current.servers,
       }));
     }
   },

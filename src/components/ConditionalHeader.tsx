@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation';
 import { Header } from './Header';
 
-const AUTH_ROUTES = ['/login', '/register', '/forgot-password', '/email-sent', '/select-server', '/verification'];
+const AUTH_ROUTES = ['/login', '/register', '/forgot-password', '/email-sent', '/verification'];
 
 export function ConditionalHeader() {
   const pathname = usePathname();

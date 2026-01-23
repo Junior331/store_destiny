@@ -7,6 +7,7 @@ import { useAuthStore } from '@/store/authStore';
 import { useServerStore } from '@/store/serverStore';
 import { CheckoutTemplate } from '@/components/templates/CheckoutTemplate';
 import { AuthGuard } from '@/components/auth/AuthGuard';
+import { customToast } from '@/components/CustomToast';
 
 export default function ServerCheckoutPage() {
   const router = useRouter();
@@ -15,26 +16,35 @@ export default function ServerCheckoutPage() {
 
   const { items } = useCart();
   const { isAuthenticated } = useAuthStore();
-  const { selectedServer, servers } = useServerStore();
+  const { selectedServer, setSelectedServer, servers } = useServerStore();
 
   useEffect(() => {
     if (!isAuthenticated) {
+      console.log('❌ Não autenticado - redirecionando para login');
       router.push('/login');
       return;
     }
 
-    // Verifica se o servidor está correto
+    // Busca e define o servidor correto
     const server = servers.find(s => s.slug === serverSlug);
+
     if (!server) {
-      router.push('/select-server');
+      console.error('❌ Servidor não encontrado para slug:', serverSlug);
+      customToast.error('Servidor não encontrado');
+      router.push('/destiny/view');
       return;
+    }
+
+    // Define o servidor selecionado se ainda não estiver definido
+    if (selectedServer?.slug !== serverSlug) {
+      setSelectedServer(server);
     }
 
     // Redireciona se carrinho vazio
     if (items.length === 0) {
       router.push(`/${serverSlug}/view`);
     }
-  }, [items.length, isAuthenticated, router, serverSlug, servers]);
+  }, [items.length, isAuthenticated, router, serverSlug, servers, selectedServer, setSelectedServer]);
 
   if (!isAuthenticated || items.length === 0) {
     return null;

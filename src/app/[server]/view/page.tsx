@@ -36,7 +36,7 @@ export default function ServerViewPage() {
 
       if (!server) {
         customToast.error('Servidor não encontrado');
-        router.push('/select-server');
+        router.push('/destiny/view');
         removeLoading(loadingId);
         return;
       }
