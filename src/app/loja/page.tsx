@@ -7,7 +7,7 @@ import { useAuthStore } from '@/store/authStore';
 import { useServerStore } from '@/store/serverStore';
 import { getAllProducts } from '@/lib/data/mockProducts';
 import { Typography } from '@/components/atoms/Typography';
-import { ShinyButton } from '@/components/atoms/ShinyButton';
+import { PulseButton } from '@/components/atoms/PulseButton';
 import { ProductGrid } from '@/components/organisms/ProductGrid';
 import { useCart } from '@/lib/hooks/useCart';
 import { AuthGuard } from '@/components/auth/AuthGuard';
@@ -118,9 +118,13 @@ export default function LojaPage() {
         <div className='relative'>
           <ProductGrid products={products} loading={isLoading} />
 
-            <ShinyButton onClick={handleCheckout} cartCount={items.length}>
-              Finalizar pedido
-            </ShinyButton>
+          {items.length > 0 && (
+            <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50">
+              <PulseButton onClick={handleCheckout} size="xl" showIcon={false}>
+                Finalizar pedido ({items.length})
+              </PulseButton>
+            </div>
+          )}
         </div>
       </div>
     </AuthGuard>

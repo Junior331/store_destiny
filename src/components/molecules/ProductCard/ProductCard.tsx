@@ -3,13 +3,13 @@
 import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ShoppingCart, Plus, Minus } from "lucide-react";
+import { ShoppingCart, Plus, Minus, Loader2 } from "lucide-react";
 import { Product, ProductRarity } from "@/lib/types";
-import { Button } from "@/components/atoms/Button";
 import { formatCurrency, formatCash } from "@/lib/utils/formatters";
 import { useCart } from "@/lib/hooks/useCart";
 import { useProductCard } from "@/contexts/ProductCardContext";
 import { getImage } from "@/assets/images";
+import { PulseButton } from "@/components/atoms/PulseButton";
 
 export interface ProductCardProps {
   product: Product;
@@ -119,9 +119,8 @@ export function ProductCard({
       }}
     >
       <div
-        className={`absolute -inset-[10px] rounded-[20px] border-[2px] border-white pointer-events-none transition-opacity duration-300 ${
-          showButton ? 'opacity-100' : 'opacity-0'
-        }`}
+        className={`absolute -inset-[10px] rounded-[20px] border-[2px] border-white pointer-events-none transition-opacity duration-300 ${showButton ? 'opacity-100' : 'opacity-0'
+          }`}
         style={{
           filter: 'drop-shadow(0 0 2px rgba(240, 242, 235, 1))',
         }}
@@ -271,18 +270,16 @@ export function ProductCard({
 
       <div className="relative z-10 p-3 pb-4 flex flex-col">
         <div
-          className={`flex items-center -mt-[34px] -ml-[14px] mb-2 ${
-            className || ""
-          }`}
+          className={`flex items-center -mt-[34px] -ml-[14px] mb-2 ${className || ""
+            }`}
         >
           <Image
             width={194}
             height={242}
             alt={product.name}
             src={getImage(product.imageUrl)}
-            className={`rotate-[0.829deg] md:w-[194px] transition-transform duration-300 group-hover/card:-translate-y-2 ${
-              imageClassName || ""
-            }`}
+            className={`rotate-[0.829deg] md:w-[194px] transition-transform duration-300 group-hover/card:-translate-y-2 ${imageClassName || ""
+              }`}
           />
         </div>
 
@@ -325,66 +322,27 @@ export function ProductCard({
             </div>
           ) : (
             !checkoutMode && showButton && (
-              <div className="relative max-w-32 py-1 px-0.5 z-50">
-                <span className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <span className="pulse-ring" />
-                </span>
-                <motion.button
+              <div className="relative max-w-32 py-1 px-0.5 z-50" onClick={(e) => e.stopPropagation()}>
+                <PulseButton
                   onClick={(e) => {
                     e.stopPropagation();
                     handleAddToCart();
                   }}
+                  size="sm"
                   disabled={isAdding}
-                  initial={{ scale: 1 }}
-                  animate={!isAdding ? { scale: [1, 1.08, 1] } : { scale: 1.1 }}
-                  transition={
-                    !isAdding
-                      ? {
-                          duration: 2.5,
-                          repeat: Infinity,
-                          ease: "easeOut",
-                        }
-                      : { duration: 0.3 }
-                  }
-                  className={`min-w-24 h-8 bg-transparent border-2 border-white text-white text-sm py-3 px-4 rounded-full flex items-center justify-center gap-2 transition-colors duration-300 ${
-                    isAdding
-                      ? "bg-green-500 border-green-500"
-                      : "hover:bg-white/10"
-                  }`}
-
-     
                 >
                   {isAdding ? (
                     <>
-                      <svg
-                        className="animate-spin h-3.5 w-3.5"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                      </svg>
-                      Adicionado!
+                      <Loader2 size='16' className="animate-spin" />
+                      <span className={`font-medium text-sm`}>Adicionado</span>
                     </>
                   ) : (
                     <>
-                      <ShoppingCart className="w-3.5 h-3.5 !font-bold" />
-                      Adicionar
+                      <ShoppingCart size='16' className="text-white" />
+                      <span className={`text-white font-medium text-sm cursor-pointer`}>Adicionar</span>
                     </>
                   )}
-                </motion.button>
+                </PulseButton>
               </div>
             )
           )}
@@ -393,3 +351,4 @@ export function ProductCard({
     </motion.div>
   );
 }
+

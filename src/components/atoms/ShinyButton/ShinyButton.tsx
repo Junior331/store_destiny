@@ -30,21 +30,19 @@ const ShinyButton = React.forwardRef<HTMLButtonElement, ShinyButtonProps>(
           {...props}
         >
           <span className="shiny-effect absolute inset-0 rounded-full pointer-events-none" />
-
-
           <span className="relative z-10">{children}</span>
         </button>
-          {cartCount > 0 && (
-            <div className="cart-checkout">
-              <Image
-                src={getIcons("cart_checkout")}
-                alt="Cart"
-                width={16}
-                height={16}
-              />
-              <span className="checkout-cart-quantity">{cartCount}</span>
-            </div>
-          )}
+        {cartCount > 0 && (
+          <div className="cart-checkout">
+            <Image
+              src={getIcons("cart_checkout")}
+              alt="Cart"
+              width={16}
+              height={16}
+            />
+            <span className="checkout-cart-quantity">{cartCount}</span>
+          </div>
+        )}
       </div>
     );
   }
